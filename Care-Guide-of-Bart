@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Bart's Care Guide</title>
+</head>
+<body>
+    <h1>Bart's Care Guide</h1>
+
+    <h2>Food & Water</h2>
+    <ul>
+        <li>Bart eats <strong>wet dog food twice a day</strong>, 150g per meal. If he’s had a particularly active day with lots of playtime, feel free to increase the portion slightly based on his appetite.</li>
+        <li>Always ensure that <strong>his water bowl is filled</strong>—fresh water should be available to him at all times. (Although I'm also forget sometimes.)</li>
+        <li>When in doubt about whether Bart can eat something, just ask ChatGPT.</li>
+    </ul>
+
+    <h2>Walk Schedule</h2>
+    <ul>
+        <li><strong>Weekdays:</strong> No walks are needed during the workdays. If you take him to office.</li>
+        <li><strong>Weekends:</strong> Bart should be walked at <strong>9:00 a.m.</strong> and <strong>7:00 p.m.</strong> If he drinks a lot of water in the evening, an additional short walk around <strong>10:00–11:00 p.m.</strong> might be necessary.</li>
+        <li>After each walk, please <strong>wipe Bart’s feet and belly</strong> to keep him clean.</li>
+    </ul>
+
+    <h2>Sleeping Habits</h2>
+    <p>
+        At night, Bart typically <strong>starts off sleeping on the bed</strong>, but he often <strong>jumps down later to sleep on his own</strong>. By morning, he usually wants to return to the bed. If he has trouble jumping up, feel free to lift him back onto the bed.
+    </p>
+
+    <h2>Important Notes</h2>
+    <ul>
+        <li><strong>Recall Warning:</strong> Bart may not return when called if there are other dogs around. Before letting him off the leash, <strong>make sure you have a snack in your pocket</strong> to help call him back when needed.</li>
+        <li><strong>When Left Alone:</strong> If Bart is home alone, he might <strong>dig through the trash</strong>, <strong>chew tissues</strong>, or <strong>bite socks</strong>. He doesn’t open drawers, but to be safe, <strong>keep any valuable or fragile items out of reach</strong> before leaving him alone.</li>
+        <li><strong>Plants:</strong> Bart sometimes digs in potted soil and may chew on plant leaves. Please make sure to keep any toxic plants out of his reach.</li>
+    </ul>
+</body>
+</html>

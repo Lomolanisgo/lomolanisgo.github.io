@@ -1,4 +1,9 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+{% assign is_zh = false %}
+{% if page.lang == 'zh-CN' %}
+  {% assign is_zh = true %}
+{% endif %}
+
+<nav class="navbar navbar-expand-lg sticky-top site-nav">
   <div class="container">
     <a class="navbar-brand" href="{{ '/' | relative_url }}">
       <img src="{{ '/assets/images/red_logo.ico' | relative_url }}" alt="Logo" width="24" height="24" class="d-inline-block align-text-top me-1">
@@ -9,32 +14,37 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ms-auto">
+      <ul class="navbar-nav ms-auto me-3">
         <li class="nav-item">
-          <a class="nav-link {% if page.url == '/' %}active{% endif %}" href="{{ '/' | relative_url }}">Home / 首页</a>
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle {% if page.url contains 'cv' %}active{% endif %}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            CV / 简历
+          <a class="nav-link {% if page.url == '/' %}active{% endif %}"
+             href="{{ '/' | relative_url }}">
+            {% if is_zh %}首页{% else %}Home{% endif %}
           </a>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="{{ '/cv-en/' | relative_url }}">English</a></li>
-            <li><a class="dropdown-item" href="{{ '/cv-cn/' | relative_url }}">中文</a></li>
-          </ul>
         </li>
         <li class="nav-item">
-          <a class="nav-link {% if page.url contains 'pendant-drop' %}active{% endif %}" href="{{ '/pendant-drop/' | relative_url }}">Projects / 项目</a>
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle {% if page.url contains 'care-guide' %}active{% endif %}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Bart / 叨叨
+          <a class="nav-link {% if page.url contains 'cv' %}active{% endif %}"
+             href="{% if is_zh %}{{ '/cv-cn/' | relative_url }}{% else %}{{ '/cv-en/' | relative_url }}{% endif %}">
+            {% if is_zh %}简历{% else %}CV{% endif %}
           </a>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="{{ '/care-guide-bart/' | relative_url }}">English</a></li>
-            <li><a class="dropdown-item" href="{{ '/care-guide-bart-cn/' | relative_url }}">中文</a></li>
-          </ul>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if page.url contains 'pendant-drop' %}active{% endif %}"
+             href="{{ '/pendant-drop/' | relative_url }}">
+            {% if is_zh %}项目{% else %}Projects{% endif %}
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if page.url contains 'care-guide' %}active{% endif %}"
+             href="{% if is_zh %}{{ '/care-guide-bart-cn/' | relative_url }}{% else %}{{ '/care-guide-bart/' | relative_url }}{% endif %}">
+            {% if is_zh %}叨叨{% else %}Bart{% endif %}
+          </a>
         </li>
       </ul>
+      {% if page.lang_pair %}
+      <a href="{{ page.lang_pair | relative_url }}" class="btn btn-outline-light btn-sm nav-lang-btn">
+        {% if is_zh %}<i class="bi bi-translate"></i> EN{% else %}<i class="bi bi-translate"></i> 中文{% endif %}
+      </a>
+      {% endif %}
     </div>
   </div>
 </nav>

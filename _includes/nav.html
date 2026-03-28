@@ -3,48 +3,56 @@
   {% assign is_zh = true %}
 {% endif %}
 
-<nav class="navbar navbar-expand-lg sticky-top site-nav">
-  <div class="container">
-    <a class="navbar-brand" href="{{ '/' | relative_url }}">
-      <img src="{{ '/assets/images/red_logo.ico' | relative_url }}" alt="Logo" width="24" height="24" class="d-inline-block align-text-top me-1">
-      Yicheng's Grocery
-    </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ms-auto me-3">
-        <li class="nav-item">
-          <a class="nav-link {% if page.url == '/' %}active{% endif %}"
-             href="{{ '/' | relative_url }}">
-            {% if is_zh %}首页{% else %}Home{% endif %}
+<header class="site-header sticky-top">
+  <nav class="site-nav">
+    <div class="container">
+      <div class="nav-inner">
+        <a class="nav-brand" href="{{ '/' | relative_url }}">
+          <img src="{{ '/assets/images/red_logo.ico' | relative_url }}" alt="Logo" width="28" height="28">
+          <span>Yicheng's Grocery</span>
+        </a>
+
+        <button class="nav-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="nav-toggle-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse nav-collapse" id="navbarNav">
+          <ul class="nav-menu">
+            <li class="nav-menu-item">
+              <a class="nav-menu-link {% if page.url == '/' %}active{% endif %}"
+                 href="{{ '/' | relative_url }}">
+                {% if is_zh %}首页{% else %}Home{% endif %}
+              </a>
+            </li>
+            <li class="nav-menu-item">
+              <a class="nav-menu-link {% if page.url contains 'cv' %}active{% endif %}"
+                 href="{% if is_zh %}{{ '/cv-cn/' | relative_url }}{% else %}{{ '/cv-en/' | relative_url }}{% endif %}">
+                {% if is_zh %}简历{% else %}CV{% endif %}
+              </a>
+            </li>
+            <li class="nav-menu-item">
+              <a class="nav-menu-link {% if page.url contains 'pendant-drop' %}active{% endif %}"
+                 href="{{ '/pendant-drop/' | relative_url }}">
+                {% if is_zh %}项目{% else %}Projects{% endif %}
+              </a>
+            </li>
+            <li class="nav-menu-item">
+              <a class="nav-menu-link {% if page.url contains 'care-guide' %}active{% endif %}"
+                 href="{% if is_zh %}{{ '/care-guide-bart-cn/' | relative_url }}{% else %}{{ '/care-guide-bart/' | relative_url }}{% endif %}">
+                {% if is_zh %}叨叨{% else %}Bart{% endif %}
+              </a>
+            </li>
+          </ul>
+
+          {% if page.lang_pair %}
+          <a href="{{ page.lang_pair | relative_url }}" class="nav-lang-btn">
+            <i class="bi bi-translate"></i>
+            {% if is_zh %}EN{% else %}中文{% endif %}
           </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link {% if page.url contains 'cv' %}active{% endif %}"
-             href="{% if is_zh %}{{ '/cv-cn/' | relative_url }}{% else %}{{ '/cv-en/' | relative_url }}{% endif %}">
-            {% if is_zh %}简历{% else %}CV{% endif %}
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link {% if page.url contains 'pendant-drop' %}active{% endif %}"
-             href="{{ '/pendant-drop/' | relative_url }}">
-            {% if is_zh %}项目{% else %}Projects{% endif %}
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link {% if page.url contains 'care-guide' %}active{% endif %}"
-             href="{% if is_zh %}{{ '/care-guide-bart-cn/' | relative_url }}{% else %}{{ '/care-guide-bart/' | relative_url }}{% endif %}">
-            {% if is_zh %}叨叨{% else %}Bart{% endif %}
-          </a>
-        </li>
-      </ul>
-      {% if page.lang_pair %}
-      <a href="{{ page.lang_pair | relative_url }}" class="btn btn-outline-light btn-sm nav-lang-btn">
-        {% if is_zh %}<i class="bi bi-translate"></i> EN{% else %}<i class="bi bi-translate"></i> 中文{% endif %}
-      </a>
-      {% endif %}
+          {% endif %}
+        </div>
+      </div>
     </div>
-  </div>
-</nav>
+  </nav>
+</header>

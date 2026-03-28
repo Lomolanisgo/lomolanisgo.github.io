@@ -1,0 +1,14 @@
+title: "Yicheng's Grocery"
+description: "义程的杂货铺 - Personal website of Yicheng Zang"
+url: "https://lomolanisgo.github.io"
+baseurl: ""
+
+# Build settings
+markdown: kramdown
+permalink: pretty
+
+# Exclude files from build
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - README.md

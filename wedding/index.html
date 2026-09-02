@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>婚礼来宾住宿排期</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap">
+<style>
+  /* 单主题设计：纸面预订单，所有颜色显式指定 */
+  :root {
+    --paper: #FCFAF6;
+    --card: #FFFFFF;
+    --ink: #2E2723;
+    --muted: #8C7F74;
+    --faint: #B8AB9E;
+    --line: #E9E1D5;
+    --line-strong: #D8CCBB;
+    --red: #A62B24;
+    --red-deep: #7E1F1A;
+    --red-wash: #F7ECE8;
+    --gold: #9C7A3C;
+  }
+  * { box-sizing: border-box; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Noto Sans SC", "PingFang SC", "Hiragino Sans GB", sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 0;
+    padding: 40px 24px 56px;
+  }
+  .sheet { max-width: 1000px; margin: 0 auto; }
+
+  header { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 8px 24px; border-bottom: 3px double var(--red); padding-bottom: 16px; }
+  h1 {
+    font-family: "Noto Serif SC", "Songti SC", serif;
+    font-size: 30px; font-weight: 700; margin: 0; letter-spacing: 2px;
+    color: var(--red-deep); text-wrap: balance;
+  }
+  h1 .xi { color: var(--gold); font-size: 22px; margin-right: 10px; }
+  .daterange { font-size: 15px; color: var(--muted); letter-spacing: 1px; }
+  .daterange strong { color: var(--ink); font-weight: 500; }
+
+  .stats { display: flex; flex-wrap: wrap; gap: 12px; margin: 20px 0 28px; }
+  .stat {
+    background: var(--card); border: 1px solid var(--line); border-radius: 6px;
+    padding: 10px 18px; min-width: 132px;
+  }
+  .stat b { display: block; font-size: 22px; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--red-deep); }
+  .stat span { font-size: 12px; color: var(--muted); letter-spacing: .08em; }
+  .stat small { font-size: 12px; color: var(--faint); font-weight: 400; }
+
+  .scroll { overflow-x: auto; }
+  .chart { min-width: 940px; background: var(--card); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+
+  .row {
+    display: grid;
+    grid-template-columns: 172px 52px 78px 78px 92px 1fr;
+    align-items: stretch;
+  }
+  .row > div { padding: 0 10px; display: flex; align-items: center; min-height: 34px; }
+  .body-row { border-top: 1px solid var(--line); }
+  .body-row:hover { background: var(--red-wash); }
+
+  .head { background: var(--paper); border-bottom: 1px solid var(--line-strong); }
+  .head > div { font-size: 12px; font-weight: 700; color: var(--muted); letter-spacing: .12em; min-height: 30px; }
+  .head .tl { padding: 0; }
+
+  .row > div:first-child { min-width: 0; }
+  .name { min-width: 0; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; line-height: 34px; }
+  .num { justify-content: center; font-variant-numeric: tabular-nums; color: var(--ink); }
+  .num.zero { color: var(--faint); }
+  .date { font-variant-numeric: tabular-nums; color: var(--muted); font-size: 13px; white-space: nowrap; }
+
+  /* 时间轴：10/3–10/7，4 晚，每晚 25% */
+  .tl { position: relative; padding: 0 !important; }
+  .tl-grid { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(4, 1fr); }
+  .tl-grid i { border-left: 1px solid var(--line); }
+  .tl-grid i:nth-child(even) { background: rgba(233, 225, 213, 0.22); }
+  .tl-grid i.last { border-right: 1px solid var(--line); }
+
+  .tag {
+    border: 1px solid #E5C9C2; border-radius: 3px; padding: 1px 6px;
+    font-size: 11px; color: var(--red-deep); background: var(--red-wash); white-space: nowrap;
+  }
+  .tag.fam { color: var(--gold); background: #F6F0E3; border-color: #E0D2B4; }
+  .tag.new { color: #FCF6EF; background: var(--red); border-color: var(--red-deep); }
+
+  /* 相邻房分组圆点 */
+  .adj {
+    font-style: normal; flex: none; margin-left: 6px;
+    width: 16px; height: 16px; border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 700; color: #FFFFFF;
+  }
+  .adj.a { background: #3E6B9E; }
+  .adj.b { background: #4A7C59; }
+  .adj.c { background: #7C5CA8; }
+
+  /* 列头：每列 = 一晚，标签居中在列内 */
+  .nightlabels { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(4, 1fr); }
+  .nightlabels em {
+    font-style: normal; display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700; color: var(--ink); white-space: nowrap;
+  }
+  .nightlabels em small { color: var(--faint); font-weight: 400; margin-left: 3px; }
+
+  .bar {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    height: 18px; border-radius: 4px;
+    background: var(--red);
+    display: flex; align-items: center; justify-content: flex-end;
+    padding-right: 6px;
+    box-shadow: inset 0 0 0 1px rgba(126, 31, 26, 0.35);
+  }
+  .bar em { font-style: normal; font-size: 11px; font-weight: 500; color: #FCF6EF; letter-spacing: .05em; white-space: nowrap; }
+  .bar.n1 { justify-content: center; padding-right: 0; }
+
+  .divider { border-top: 1px solid var(--line-strong); background: var(--paper); }
+  .divider > div { min-height: 26px; font-size: 12px; font-weight: 700; color: var(--gold); letter-spacing: .15em; }
+
+  /* 每晚在住组数汇总 */
+  .totals { border-top: 2px solid var(--line-strong); background: var(--paper); }
+  .totals .label { grid-column: 1 / 6; justify-content: flex-end; font-size: 12px; font-weight: 700; color: var(--muted); letter-spacing: .12em; }
+  .totals .tl { min-height: 44px; }
+  .night-cells { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(4, 1fr); }
+  .night-cells b {
+    border-left: 1px solid var(--line); display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 1px;
+    font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--red-deep);
+  }
+  .night-cells b:last-child { border-right: 1px solid var(--line); }
+  .night-cells b small { font-size: 10px; font-weight: 400; color: var(--faint); letter-spacing: .05em; }
+
+  .legend { margin-top: 18px; display: grid; grid-template-columns: 5.5em 1fr; gap: 6px 14px; font-size: 13px; color: var(--muted); max-width: 860px; }
+  .legend dt { margin: 0; font-weight: 700; font-size: 12px; color: var(--gold); letter-spacing: .1em; line-height: 1.7; }
+  .legend dd { margin: 0; line-height: 1.7; }
+  .legend b { color: var(--ink); font-weight: 500; }
+  .legend .adj { width: 15px; height: 15px; margin: 0 4px 0 0; vertical-align: -2px; }
+  .legend .adj-item { white-space: nowrap; margin-right: 14px; }
+
+  @media print {
+    body { padding: 0; background: #FFFFFF; }
+    .scroll { overflow: visible; }
+    .chart { border-color: var(--line-strong); }
+    .stat, .chart { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+  <header>
+    <h1><span class="xi">囍</span>婚礼来宾住宿排期</h1>
+    <div class="daterange">宁波 · <strong>2026 年 10 月 3 日 — 10 月 7 日</strong></div>
+  </header>
+
+  <div class="stats">
+    <div class="stat"><b>25 <small>组</small></b><span>已排入住</span></div>
+    <div class="stat"><b>23 <small>组</small></b><span>峰值夜 · 10/5</span></div>
+    <div class="stat"><b>46 <small>人</small></b><span>入住总人数</span></div>
+  </div>
+
+  <div class="scroll">
+  <div class="chart">
+    <div class="row head">
+      <div>姓名</div><div style="justify-content:center">入住</div><div>抵达</div><div>返回</div><div>备注</div>
+      <div class="tl">
+        <div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div>
+        <div class="nightlabels">
+          <em>10/3 晚<small>周六</small></em>
+          <em>10/4 晚<small>周日</small></em>
+          <em>10/5 晚<small>周一</small></em>
+          <em>10/6 晚<small>周二</small></em>
+        </div>
+      </div>
+    </div>
+
+    <!-- 新人房 -->
+    <div class="row body-row"><div><span class="name">臧义程&amp;陈景怡</span></div><div class="num">2</div><div class="date">10/3 六</div><div class="date">10/7 三</div><div class="note"><span class="tag new">新人房</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:0%;width:100%" title="臧义程&陈景怡（新人）· 2人 · 10/3 入住，10/7 退房，4晚"><em>4晚</em></div></div></div>
+
+    <!-- 10/3 抵达 · 4晚 -->
+    <div class="row body-row"><div><span class="name">马丞</span><i class="adj a">A</i></div><div class="num">2</div><div class="date">10/3 六</div><div class="date">10/7 三</div><div class="note"></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:0%;width:100%" title="马丞 · 2人 · 10/3 入住，10/7 退房，4晚"><em>4晚</em></div></div></div>
+    <div class="row body-row"><div><span class="name">王有凤阿姨&amp;郭嘉锐</span></div><div class="num">2</div><div class="date">10/3 六</div><div class="date">10/7 三</div><div class="note"></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:0%;width:100%" title="王有凤阿姨&郭嘉锐 · 2人 · 10/3 入住，10/7 退房，4晚"><em>4晚</em></div></div></div>
+    <div class="row body-row"><div><span class="name">孟永民大大&amp;岳阿姨</span></div><div class="num">2</div><div class="date">10/3 六</div><div class="date">10/7 三</div><div class="note"></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:0%;width:100%" title="孟永民大大&岳阿姨 · 2人 · 10/3 入住，10/7 退房，4晚"><em>4晚</em></div></div></div>
+    <div class="row body-row"><div><span class="name">孟永清大大&amp;李三叔</span></div><div class="num">2</div><div class="date">10/3 六</div><div class="date">10/7 三</div><div class="note"><span class="tag">双床房</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:0%;width:100%" title="孟永清大大&李三叔 · 2人 · 10/3 入住，10/7 退房，4晚"><em>4晚</em></div></div></div>
+    <div class="row body-row"><div><span class="name">李东春大大</span></div><div class="num">1</div><div class="date">10/3 六</div><div class="date">10/7 三</div><div class="note"></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:0%;width:100%" title="李东春大大 · 1人 · 10/3 入住，10/7 退房，4晚"><em>4晚</em></div></div></div>
+    <div class="row body-row"><div><span class="name">周恒</span><i class="adj b">B</i></div><div class="num">1</div><div class="date">10/3 六</div><div class="date">10/7 三</div><div class="note"></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:0%;width:100%" title="周恒 · 1人 · 10/3 入住，10/7 退房，4晚"><em>4晚</em></div></div></div>
+
+    <!-- 10/4 抵达 · 3晚 -->
+    <div class="row body-row"><div><span class="name">程永明 &amp; 臧晓军</span><i class="adj b">B</i></div><div class="num">2</div><div class="date">10/4 日</div><div class="date">10/7 三</div><div class="note"></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:25%;width:75%" title="程永明&臧晓军（新郎父母）· 2人 · 10/4 入住，10/7 退房，3晚"><em>3晚</em></div></div></div>
+    <div class="row body-row"><div><span class="name">付汉奇</span></div><div class="num">2</div><div class="date">10/4 日</div><div class="date">10/7 三</div><div class="note"></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:25%;width:75%" title="付汉奇 · 2人 · 10/4 入住，10/7 退房，3晚"><em>3晚</em></div></div></div>
+    <div class="row body-row"><div><span class="name">张博&amp;李万中</span><i class="adj a">A</i></div><div class="num">2</div><div class="date">10/4 日</div><div class="date">10/7 三</div><div class="note"><span class="tag">双床房</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:25%;width:75%" title="张博&李万中 · 2人 · 10/4 入住，10/7 退房，3晚"><em>3晚</em></div></div></div>
+    <div class="row body-row"><div><span class="name">王永恒</span><i class="adj a">A</i></div><div class="num">1</div><div class="date">10/4 日</div><div class="date">10/7 三</div><div class="note"></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:25%;width:75%" title="王永恒 · 1人 · 10/4 入住，10/7 退房，3晚"><em>3晚</em></div></div></div>
+    <div class="row body-row"><div><span class="name">李如阿姨&amp;陈文媛阿姨</span></div><div class="num">2</div><div class="date">10/4 日</div><div class="date">10/7 三</div><div class="note"><span class="tag">双床房</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:25%;width:75%" title="李如阿姨&陈文媛阿姨 · 2人 · 10/4 入住，10/7 退房，3晚"><em>3晚</em></div></div></div>
+    <div class="row body-row"><div><span class="name">奥斯丁</span></div><div class="num">1</div><div class="date">10/4 日</div><div class="date">10/7 三</div><div class="note"></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:25%;width:75%" title="奥斯丁 · 1人 · 10/4 入住，10/7 退房，3晚"><em>3晚</em></div></div></div>
+
+    <!-- 10/5 抵达 -->
+    <div class="row body-row"><div><span class="name">侯焯霖&amp;周永奇</span><i class="adj a">A</i></div><div class="num">3</div><div class="date">10/5 一</div><div class="date">10/7 三</div><div class="note"><span class="tag fam">家庭房</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:50%;width:50%" title="侯焯霖&周永奇 · 3人 · 10/5 入住，10/7 退房，2晚"><em>2晚</em></div></div></div>
+    <div class="row body-row"><div><span class="name">老姑&amp;姑父&amp;黄淞琦</span><i class="adj b">B</i></div><div class="num">3</div><div class="date">10/5 一</div><div class="date">10/7 三</div><div class="note"><span class="tag fam">家庭房</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:50%;width:50%" title="老姑&姑父&黄淞琦 · 3人 · 10/5 入住，10/7 退房，2晚"><em>2晚</em></div></div></div>
+    <div class="row body-row"><div><span class="name">邢泽宏</span><i class="adj a">A</i></div><div class="num">2</div><div class="date">10/5 一</div><div class="date">10/7 三</div><div class="note"></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:50%;width:50%" title="邢泽宏 · 2人 · 10/5 入住，10/7 退房，2晚"><em>2晚</em></div></div></div>
+    <div class="row body-row"><div><span class="name">谢志远</span><i class="adj c">C</i></div><div class="num">2</div><div class="date">10/5 一</div><div class="date">10/7 三</div><div class="note"></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:50%;width:50%" title="谢志远 · 2人 · 10/5 入住，10/7 退房，2晚"><em>2晚</em></div></div></div>
+    <div class="row body-row"><div><span class="name">麦海锋&amp;赵梦昊</span><i class="adj c">C</i></div><div class="num">2</div><div class="date">10/5 一</div><div class="date">10/7 三</div><div class="note"><span class="tag">双床房</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:50%;width:50%" title="麦海锋&赵梦昊 · 2人 · 10/5 入住，10/7 退房，2晚"><em>2晚</em></div></div></div>
+    <div class="row body-row"><div><span class="name">陈憬夫</span></div><div class="num">1</div><div class="date">10/5 一</div><div class="date">10/7 三</div><div class="note"></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:50%;width:50%" title="陈憬夫 · 1人 · 10/5 入住，10/7 退房，2晚"><em>2晚</em></div></div></div>
+    <div class="row body-row"><div><span class="name">李谷一</span></div><div class="num">1</div><div class="date">10/5 一</div><div class="date">10/7 三</div><div class="note"></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:50%;width:50%" title="李谷一 · 1人 · 10/5 入住，10/7 退房，2晚"><em>2晚</em></div></div></div>
+    <div class="row body-row"><div><span class="name">跟妆老师</span></div><div class="num">2</div><div class="date">10/5 一</div><div class="date">10/6 二</div><div class="note"><span class="tag">双床房</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar n1" style="left:50%;width:25%" title="跟妆老师 · 2人 · 10/5 入住，10/6 退房，1晚"><em>1晚</em></div></div></div>
+    <div class="row body-row"><div><span class="name">摄像老师</span></div><div class="num">2</div><div class="date">10/5 一</div><div class="date">10/6 二</div><div class="note"><span class="tag">双床房</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar n1" style="left:50%;width:25%" title="摄像老师 · 2人 · 10/5 入住，10/6 退房，1晚"><em>1晚</em></div></div></div>
+    <div class="row body-row"><div><span class="name">摄影老师</span></div><div class="num">2</div><div class="date">10/5 一</div><div class="date">10/6 二</div><div class="note"><span class="tag">双床房</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar n1" style="left:50%;width:25%" title="摄影老师 · 2人 · 10/5 入住，10/6 退房，1晚"><em>1晚</em></div></div></div>
+
+    <!-- 10/6 抵达 -->
+    <div class="row body-row"><div><span class="name">王晨雨&amp;姚亚男</span></div><div class="num">2</div><div class="date">10/6 二</div><div class="date">10/7 三</div><div class="note"></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar n1" style="left:75%;width:25%" title="王晨雨&姚亚男 · 2人 · 10/6 入住，10/7 退房，1晚"><em>1晚</em></div></div></div>
+    <div class="row body-row"><div><span class="name">高晓娟&amp;姐夫</span></div><div class="num">2</div><div class="date">10/6 二</div><div class="date">10/7 三</div><div class="note"></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar n1" style="left:75%;width:25%" title="高晓娟&姐夫 · 2人 · 10/6 入住，10/7 退房，1晚"><em>1晚</em></div></div></div>
+
+    <!-- 每晚合计 -->
+    <div class="row totals">
+      <div class="label">每晚在住组数</div>
+      <div class="tl">
+        <div class="night-cells">
+          <b>7<small>10/3 晚</small></b>
+          <b>13<small>10/4 晚</small></b>
+          <b>23<small>10/5 晚</small></b>
+          <b>22<small>10/6 晚</small></b>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <dl class="legend">
+    <dt>读法</dt>
+    <dd>时间轴每列代表一晚住宿：红条盖到哪列，就住哪晚（如 10/5 抵达、10/6 返回＝只住「10/5 晚」一列）。「入住」为每组入住人数。</dd>
+    <dt>房型</dt>
+    <dd>见备注列；未标注的大床、双床均可。</dd>
+    <dt>相邻房</dt>
+    <dd>
+      姓名后同字母圆点＝房间尽量相邻：<br>
+      <span class="adj-item"><i class="adj a">A</i>马丞 / 张博&李万中 / 王永恒 / 侯焯霖&周永奇 / 邢泽宏</span><br>
+      <span class="adj-item"><i class="adj b">B</i>程永明&臧晓军 / 周恒 / 老姑&姑父&黄淞琦</span><br>
+      <span class="adj-item"><i class="adj c">C</i>谢志远 / 麦海锋&赵梦昊</span>
+    </dd>
+    <dt>日期待定</dt>
+    <dd><b>杨子丰</b>（2 人）、<b>王泽轩</b>（2 人），确认后补入。</dd>
+  </dl>
+</div>
+</body>
+</html>

@@ -140,11 +140,16 @@
   .legend .adj { width: 15px; height: 15px; margin: 0 4px 0 0; vertical-align: -2px; }
   .legend .adj-item { white-space: nowrap; margin-right: 14px; }
 
+  .pagefoot { margin-top: 22px; padding-top: 12px; border-top: 1px solid var(--line); font-size: 12px; color: var(--faint); }
+  .pagefoot a.syncbtn { color: var(--red-deep); text-decoration: none; border: 1px solid var(--line-strong); border-radius: 4px; padding: 2px 8px; margin-left: 6px; background: var(--card); }
+  .pagefoot a.syncbtn:hover { background: var(--red-wash); }
+
   @media print {
     body { padding: 0; background: #FFFFFF; }
     .scroll { overflow: visible; }
     .chart { border-color: var(--line-strong); }
     .stat, .chart { break-inside: avoid; }
+    .pagefoot a.syncbtn { display: none; }
   }
 </style>
 </head>
@@ -232,6 +237,8 @@
     <dt>日期待定</dt>
     <dd><b>王泽轩</b>（2 人），确认后补入。</dd>
   </dl>
+
+  <p class="pagefoot">数据更新于 2026-09-09 18:20（北京时间）· 数据源 Notion，每 30 分钟自动同步<a class="syncbtn" href="https://github.com/Lomolanisgo/lomolanisgo.github.io/actions/workflows/update-wedding.yml" target="_blank" rel="noopener">🔄 立即同步</a></p>
 </div>
 </body>
 </html>

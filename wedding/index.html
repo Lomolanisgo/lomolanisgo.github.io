@@ -7,7 +7,7 @@
 <title>婚礼来宾住宿排期</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap">
 <style>
-  /* 单主题设计：纸面预订单，所有颜色显式指定 */
+  /* 单主题设计：纸面预订单，所有颜色显式指定。本文件由 scripts/generate_wedding.py 从 Notion 生成，勿手改 */
   :root {
     --paper: #FCFAF6;
     --card: #FFFFFF;
@@ -74,7 +74,7 @@
   .num.zero { color: var(--faint); }
   .date { font-variant-numeric: tabular-nums; color: var(--muted); font-size: 13px; white-space: nowrap; }
 
-  /* 时间轴：10/3–10/7，4 晚，每晚 25% */
+  /* 时间轴：每列 = 一晚 */
   .tl { position: relative; padding: 0 !important; }
   .tl-grid { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(4, 1fr); }
   .tl-grid i { border-left: 1px solid var(--line); }
@@ -119,9 +119,6 @@
   }
   .bar em { font-style: normal; font-size: 11px; font-weight: 500; color: #FCF6EF; letter-spacing: .05em; white-space: nowrap; }
   .bar.n1 { justify-content: center; padding-right: 0; }
-
-  .divider { border-top: 1px solid var(--line-strong); background: var(--paper); }
-  .divider > div { min-height: 26px; font-size: 12px; font-weight: 700; color: var(--gold); letter-spacing: .15em; }
 
   /* 每晚在住组数汇总 */
   .totals { border-top: 2px solid var(--line-strong); background: var(--paper); }
@@ -179,42 +176,32 @@
       </div>
     </div>
 
-    <!-- 新人房 -->
-    <div class="row body-row"><div><span class="name">臧义程&amp;陈景怡</span><i class="adj a">A</i></div><div class="num">2</div><div class="date">10/3 六</div><div class="date">10/7 三</div><div class="note"><span class="tag new">新人房</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:0%;width:100%" title="臧义程&陈景怡（新人）· 2人 · 10/3 入住，10/7 退房，4晚"><em>4晚</em></div></div></div>
-
-    <!-- 10/3 抵达 · 4晚 -->
+    <div class="row body-row"><div><span class="name">臧义程&amp;陈景怡</span><i class="adj a">A</i></div><div class="num">2</div><div class="date">10/3 六</div><div class="date">10/7 三</div><div class="note"><span class="tag new">新人房</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:0%;width:100%" title="臧义程&amp;陈景怡 · 2人 · 10/3 入住，10/7 退房，4晚"><em>4晚</em></div></div></div>
+    <div class="row body-row"><div><span class="name">孟永民大大&amp;岳阿姨</span><i class="adj d">D</i></div><div class="num">2</div><div class="date">10/3 六</div><div class="date">10/7 三</div><div class="note"></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:0%;width:100%" title="孟永民大大&amp;岳阿姨 · 2人 · 10/3 入住，10/7 退房，4晚"><em>4晚</em></div></div></div>
+    <div class="row body-row"><div><span class="name">孟永清大大&amp;李三叔</span><i class="adj d">D</i></div><div class="num">2</div><div class="date">10/3 六</div><div class="date">10/7 三</div><div class="note"><span class="tag">双床房</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:0%;width:100%" title="孟永清大大&amp;李三叔 · 2人 · 10/3 入住，10/7 退房，4晚"><em>4晚</em></div></div></div>
+    <div class="row body-row"><div><span class="name">王有凤阿姨&amp;郭嘉锐</span></div><div class="num">2</div><div class="date">10/3 六</div><div class="date">10/7 三</div><div class="note"></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:0%;width:100%" title="王有凤阿姨&amp;郭嘉锐 · 2人 · 10/3 入住，10/7 退房，4晚"><em>4晚</em></div></div></div>
     <div class="row body-row"><div><span class="name">马丞</span><i class="adj b">B</i></div><div class="num">2</div><div class="date">10/3 六</div><div class="date">10/7 三</div><div class="note"></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:0%;width:100%" title="马丞 · 2人 · 10/3 入住，10/7 退房，4晚"><em>4晚</em></div></div></div>
-    <div class="row body-row"><div><span class="name">王有凤阿姨&amp;郭嘉锐</span></div><div class="num">2</div><div class="date">10/3 六</div><div class="date">10/7 三</div><div class="note"></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:0%;width:100%" title="王有凤阿姨&郭嘉锐 · 2人 · 10/3 入住，10/7 退房，4晚"><em>4晚</em></div></div></div>
-    <div class="row body-row"><div><span class="name">孟永民大大&amp;岳阿姨</span><i class="adj d">D</i></div><div class="num">2</div><div class="date">10/3 六</div><div class="date">10/7 三</div><div class="note"></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:0%;width:100%" title="孟永民大大&岳阿姨 · 2人 · 10/3 入住，10/7 退房，4晚"><em>4晚</em></div></div></div>
-    <div class="row body-row"><div><span class="name">孟永清大大&amp;李三叔</span><i class="adj d">D</i></div><div class="num">2</div><div class="date">10/3 六</div><div class="date">10/7 三</div><div class="note"><span class="tag">双床房</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:0%;width:100%" title="孟永清大大&李三叔 · 2人 · 10/3 入住，10/7 退房，4晚"><em>4晚</em></div></div></div>
     <div class="row body-row"><div><span class="name">李东春大大</span><i class="adj d">D</i></div><div class="num">1</div><div class="date">10/3 六</div><div class="date">10/7 三</div><div class="note"></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:0%;width:100%" title="李东春大大 · 1人 · 10/3 入住，10/7 退房，4晚"><em>4晚</em></div></div></div>
-
-    <!-- 10/4 抵达 · 3晚 -->
-    <div class="row body-row"><div><span class="name">程永明 &amp; 臧晓军</span><i class="adj a">A</i></div><div class="num">2</div><div class="date">10/4 日</div><div class="date">10/7 三</div><div class="note"><span class="tag par">父母房</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:25%;width:75%" title="程永明&臧晓军（新郎父母）· 2人 · 10/4 入住，10/7 退房，3晚"><em>3晚</em></div></div></div>
+    <div class="row body-row"><div><span class="name">程永明 &amp; 臧晓军</span><i class="adj a">A</i></div><div class="num">2</div><div class="date">10/4 日</div><div class="date">10/7 三</div><div class="note"><span class="tag par">父母房</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:25%;width:75%" title="程永明 &amp; 臧晓军 · 2人 · 10/4 入住，10/7 退房，3晚"><em>3晚</em></div></div></div>
     <div class="row body-row"><div><span class="name">付汉奇</span></div><div class="num">2</div><div class="date">10/4 日</div><div class="date">10/7 三</div><div class="note"></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:25%;width:75%" title="付汉奇 · 2人 · 10/4 入住，10/7 退房，3晚"><em>3晚</em></div></div></div>
-    <div class="row body-row"><div><span class="name">张博&amp;李万中</span><i class="adj b">B</i></div><div class="num">2</div><div class="date">10/4 日</div><div class="date">10/7 三</div><div class="note"><span class="tag">双床房</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:25%;width:75%" title="张博&李万中 · 2人 · 10/4 入住，10/7 退房，3晚"><em>3晚</em></div></div></div>
-    <div class="row body-row"><div><span class="name">王永恒&amp;杨子丰</span><i class="adj b">B</i></div><div class="num">2</div><div class="date">10/4 日</div><div class="date">10/7 三</div><div class="note"></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:25%;width:75%" title="王永恒&杨子丰 · 2人 · 10/4 入住，10/7 退房，3晚"><em>3晚</em></div></div></div>
-    <div class="row body-row"><div><span class="name">李如阿姨&amp;陈文媛阿姨</span></div><div class="num">2</div><div class="date">10/4 日</div><div class="date">10/7 三</div><div class="note"><span class="tag">双床房</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:25%;width:75%" title="李如阿姨&陈文媛阿姨 · 2人 · 10/4 入住，10/7 退房，3晚"><em>3晚</em></div></div></div>
+    <div class="row body-row"><div><span class="name">张博&amp;李万中</span><i class="adj b">B</i></div><div class="num">2</div><div class="date">10/4 日</div><div class="date">10/7 三</div><div class="note"><span class="tag">双床房</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:25%;width:75%" title="张博&amp;李万中 · 2人 · 10/4 入住，10/7 退房，3晚"><em>3晚</em></div></div></div>
+    <div class="row body-row"><div><span class="name">李如阿姨&amp;陈文媛阿姨</span></div><div class="num">2</div><div class="date">10/4 日</div><div class="date">10/7 三</div><div class="note"><span class="tag">双床房</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:25%;width:75%" title="李如阿姨&amp;陈文媛阿姨 · 2人 · 10/4 入住，10/7 退房，3晚"><em>3晚</em></div></div></div>
+    <div class="row body-row"><div><span class="name">王永恒&amp;杨子丰</span><i class="adj b">B</i></div><div class="num">2</div><div class="date">10/4 日</div><div class="date">10/7 三</div><div class="note"></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:25%;width:75%" title="王永恒&amp;杨子丰 · 2人 · 10/4 入住，10/7 退房，3晚"><em>3晚</em></div></div></div>
     <div class="row body-row"><div><span class="name">奥斯丁</span></div><div class="num">1</div><div class="date">10/4 日</div><div class="date">10/7 三</div><div class="note"></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:25%;width:75%" title="奥斯丁 · 1人 · 10/4 入住，10/7 退房，3晚"><em>3晚</em></div></div></div>
-
-    <!-- 10/5 抵达 -->
-    <div class="row body-row"><div><span class="name">周恒</span><i class="adj a">A</i></div><div class="num">1</div><div class="date">10/5 一</div><div class="date">10/7 三</div><div class="note"></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:50%;width:50%" title="周恒 · 1人 · 10/5 入住，10/7 退房，2晚"><em>2晚</em></div></div></div>
-    <div class="row body-row"><div><span class="name">侯焯霖&amp;周永奇</span><i class="adj b">B</i></div><div class="num">3</div><div class="date">10/5 一</div><div class="date">10/7 三</div><div class="note"><span class="tag fam">家庭房</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:50%;width:50%" title="侯焯霖&周永奇 · 3人 · 10/5 入住，10/7 退房，2晚"><em>2晚</em></div></div></div>
-    <div class="row body-row"><div><span class="name">老姑&amp;姑父&amp;黄淞琦</span><i class="adj a">A</i></div><div class="num">3</div><div class="date">10/5 一</div><div class="date">10/7 三</div><div class="note"><span class="tag fam">家庭房</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:50%;width:50%" title="老姑&姑父&黄淞琦 · 3人 · 10/5 入住，10/7 退房，2晚"><em>2晚</em></div></div></div>
-    <div class="row body-row"><div><span class="name">邢泽宏</span><i class="adj b">B</i></div><div class="num">2</div><div class="date">10/5 一</div><div class="date">10/7 三</div><div class="note"></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:50%;width:50%" title="邢泽宏 · 2人 · 10/5 入住，10/7 退房，2晚"><em>2晚</em></div></div></div>
+    <div class="row body-row"><div><span class="name">侯焯霖&amp;周永奇</span><i class="adj b">B</i></div><div class="num">3</div><div class="date">10/5 一</div><div class="date">10/7 三</div><div class="note"><span class="tag fam">家庭房</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:50%;width:50%" title="侯焯霖&amp;周永奇 · 3人 · 10/5 入住，10/7 退房，2晚"><em>2晚</em></div></div></div>
+    <div class="row body-row"><div><span class="name">老姑&amp;姑父&amp;黄淞琦</span><i class="adj a">A</i></div><div class="num">3</div><div class="date">10/5 一</div><div class="date">10/7 三</div><div class="note"><span class="tag fam">家庭房</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:50%;width:50%" title="老姑&amp;姑父&amp;黄淞琦 · 3人 · 10/5 入住，10/7 退房，2晚"><em>2晚</em></div></div></div>
     <div class="row body-row"><div><span class="name">谢志远</span><i class="adj c">C</i></div><div class="num">2</div><div class="date">10/5 一</div><div class="date">10/7 三</div><div class="note"></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:50%;width:50%" title="谢志远 · 2人 · 10/5 入住，10/7 退房，2晚"><em>2晚</em></div></div></div>
-    <div class="row body-row"><div><span class="name">麦海锋&amp;赵梦昊</span><i class="adj c">C</i></div><div class="num">2</div><div class="date">10/5 一</div><div class="date">10/7 三</div><div class="note"><span class="tag">双床房</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:50%;width:50%" title="麦海锋&赵梦昊 · 2人 · 10/5 入住，10/7 退房，2晚"><em>2晚</em></div></div></div>
-    <div class="row body-row"><div><span class="name">陈憬夫</span></div><div class="num">1</div><div class="date">10/5 一</div><div class="date">10/7 三</div><div class="note"></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:50%;width:50%" title="陈憬夫 · 1人 · 10/5 入住，10/7 退房，2晚"><em>2晚</em></div></div></div>
+    <div class="row body-row"><div><span class="name">邢泽宏</span><i class="adj b">B</i></div><div class="num">2</div><div class="date">10/5 一</div><div class="date">10/7 三</div><div class="note"></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:50%;width:50%" title="邢泽宏 · 2人 · 10/5 入住，10/7 退房，2晚"><em>2晚</em></div></div></div>
+    <div class="row body-row"><div><span class="name">麦海锋&amp;赵梦昊</span><i class="adj c">C</i></div><div class="num">2</div><div class="date">10/5 一</div><div class="date">10/7 三</div><div class="note"><span class="tag">双床房</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:50%;width:50%" title="麦海锋&amp;赵梦昊 · 2人 · 10/5 入住，10/7 退房，2晚"><em>2晚</em></div></div></div>
+    <div class="row body-row"><div><span class="name">周恒</span><i class="adj a">A</i></div><div class="num">1</div><div class="date">10/5 一</div><div class="date">10/7 三</div><div class="note"></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:50%;width:50%" title="周恒 · 1人 · 10/5 入住，10/7 退房，2晚"><em>2晚</em></div></div></div>
     <div class="row body-row"><div><span class="name">李谷一</span></div><div class="num">1</div><div class="date">10/5 一</div><div class="date">10/7 三</div><div class="note"></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:50%;width:50%" title="李谷一 · 1人 · 10/5 入住，10/7 退房，2晚"><em>2晚</em></div></div></div>
-    <div class="row body-row"><div><span class="name">跟妆老师</span></div><div class="num">2</div><div class="date">10/5 一</div><div class="date">10/6 二</div><div class="note"><span class="tag">双床房</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar n1" style="left:50%;width:25%" title="跟妆老师 · 2人 · 10/5 入住，10/6 退房，1晚"><em>1晚</em></div></div></div>
+    <div class="row body-row"><div><span class="name">陈憬夫</span></div><div class="num">1</div><div class="date">10/5 一</div><div class="date">10/7 三</div><div class="note"></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:50%;width:50%" title="陈憬夫 · 1人 · 10/5 入住，10/7 退房，2晚"><em>2晚</em></div></div></div>
     <div class="row body-row"><div><span class="name">摄像老师</span></div><div class="num">2</div><div class="date">10/5 一</div><div class="date">10/6 二</div><div class="note"><span class="tag">双床房</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar n1" style="left:50%;width:25%" title="摄像老师 · 2人 · 10/5 入住，10/6 退房，1晚"><em>1晚</em></div></div></div>
     <div class="row body-row"><div><span class="name">摄影老师</span></div><div class="num">2</div><div class="date">10/5 一</div><div class="date">10/6 二</div><div class="note"><span class="tag">双床房</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar n1" style="left:50%;width:25%" title="摄影老师 · 2人 · 10/5 入住，10/6 退房，1晚"><em>1晚</em></div></div></div>
+    <div class="row body-row"><div><span class="name">跟妆老师</span></div><div class="num">2</div><div class="date">10/5 一</div><div class="date">10/6 二</div><div class="note"><span class="tag">双床房</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar n1" style="left:50%;width:25%" title="跟妆老师 · 2人 · 10/5 入住，10/6 退房，1晚"><em>1晚</em></div></div></div>
+    <div class="row body-row"><div><span class="name">王晨雨&amp;姚亚男</span></div><div class="num">2</div><div class="date">10/6 二</div><div class="date">10/7 三</div><div class="note"></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar n1" style="left:75%;width:25%" title="王晨雨&amp;姚亚男 · 2人 · 10/6 入住，10/7 退房，1晚"><em>1晚</em></div></div></div>
+    <div class="row body-row"><div><span class="name">高晓娟&amp;姐夫</span></div><div class="num">2</div><div class="date">10/6 二</div><div class="date">10/7 三</div><div class="note"></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar n1" style="left:75%;width:25%" title="高晓娟&amp;姐夫 · 2人 · 10/6 入住，10/7 退房，1晚"><em>1晚</em></div></div></div>
 
-    <!-- 10/6 抵达 -->
-    <div class="row body-row"><div><span class="name">王晨雨&amp;姚亚男</span></div><div class="num">2</div><div class="date">10/6 二</div><div class="date">10/7 三</div><div class="note"></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar n1" style="left:75%;width:25%" title="王晨雨&姚亚男 · 2人 · 10/6 入住，10/7 退房，1晚"><em>1晚</em></div></div></div>
-    <div class="row body-row"><div><span class="name">高晓娟&amp;姐夫</span></div><div class="num">2</div><div class="date">10/6 二</div><div class="date">10/7 三</div><div class="note"></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar n1" style="left:75%;width:25%" title="高晓娟&姐夫 · 2人 · 10/6 入住，10/7 退房，1晚"><em>1晚</em></div></div></div>
-
-    <!-- 每晚合计 -->
     <div class="row totals">
       <div class="label">每晚在住组数</div>
       <div class="tl">
@@ -237,10 +224,10 @@
     <dt>相邻房</dt>
     <dd>
       姓名后同字母圆点＝房间尽量相邻：<br>
-      <span class="adj-item"><i class="adj a">A</i>臧义程&陈景怡 / 程永明&臧晓军 / 周恒 / 老姑&姑父&黄淞琦</span><br>
-      <span class="adj-item"><i class="adj b">B</i>马丞 / 张博&李万中 / 王永恒&杨子丰 / 侯焯霖&周永奇 / 邢泽宏</span><br>
-      <span class="adj-item"><i class="adj c">C</i>谢志远 / 麦海锋&赵梦昊</span><br>
-      <span class="adj-item"><i class="adj d">D</i>孟永民大大&岳阿姨 / 孟永清大大&李三叔 / 李东春大大</span>
+      <span class="adj-item"><i class="adj a">A</i>臧义程&amp;陈景怡 / 程永明 &amp; 臧晓军 / 老姑&amp;姑父&amp;黄淞琦 / 周恒</span><br>
+      <span class="adj-item"><i class="adj b">B</i>马丞 / 张博&amp;李万中 / 王永恒&amp;杨子丰 / 侯焯霖&amp;周永奇 / 邢泽宏</span><br>
+      <span class="adj-item"><i class="adj c">C</i>谢志远 / 麦海锋&amp;赵梦昊</span><br>
+      <span class="adj-item"><i class="adj d">D</i>孟永民大大&amp;岳阿姨 / 孟永清大大&amp;李三叔 / 李东春大大</span>
     </dd>
     <dt>日期待定</dt>
     <dd><b>王泽轩</b>（2 人），确认后补入。</dd>

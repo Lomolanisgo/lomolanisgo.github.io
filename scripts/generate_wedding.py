@@ -15,6 +15,7 @@ import datetime as dt
 import html
 import json
 import os
+import re
 import sys
 import urllib.request
 
@@ -324,11 +325,16 @@ TEMPLATE = """<!DOCTYPE html>
   .legend .adj {{ width: 15px; height: 15px; margin: 0 4px 0 0; vertical-align: -2px; }}
   .legend .adj-item {{ white-space: nowrap; margin-right: 14px; }}
 
+  .pagefoot {{ margin-top: 22px; padding-top: 12px; border-top: 1px solid var(--line); font-size: 12px; color: var(--faint); }}
+  .pagefoot a.syncbtn {{ color: var(--red-deep); text-decoration: none; border: 1px solid var(--line-strong); border-radius: 4px; padding: 2px 8px; margin-left: 6px; background: var(--card); }}
+  .pagefoot a.syncbtn:hover {{ background: var(--red-wash); }}
+
   @media print {{
     body {{ padding: 0; background: #FFFFFF; }}
     .scroll {{ overflow: visible; }}
     .chart {{ border-color: var(--line-strong); }}
     .stat, .chart {{ break-inside: avoid; }}
+    .pagefoot a.syncbtn {{ display: none; }}
   }}
 </style>
 </head>
@@ -383,6 +389,8 @@ TEMPLATE = """<!DOCTYPE html>
     <dt>日期待定</dt>
     <dd>{pending}</dd>
   </dl>
+
+  <p class="pagefoot">数据更新于 __UPDATED_AT__（北京时间）· 数据源 Notion，每 30 分钟自动同步<a class="syncbtn" href="https://github.com/Lomolanisgo/lomolanisgo.github.io/actions/workflows/update-wedding.yml" target="_blank" rel="noopener">🔄 立即同步</a></p>
 </div>
 </body>
 </html>
@@ -408,6 +416,18 @@ def main():
 
     page = build(parse_rows(results))
     out = os.path.abspath(args.out)
+
+    # 时间戳含义为「数据最后更新时间」：数据没变就保留旧文件（含旧时间戳），
+    # 这样 Action 的 git diff 仍为空，不会每 30 分钟白提交一次。
+    ts_re = re.compile(r"数据更新于 \d{4}-\d{2}-\d{2} \d{2}:\d{2}")
+    if os.path.exists(out):
+        with open(out) as f:
+            existing = f.read()
+        if ts_re.sub("数据更新于 __UPDATED_AT__", existing) == page:
+            print("no data change; keeping existing file")
+            return 0
+    now = dt.datetime.now(dt.timezone(dt.timedelta(hours=8))).strftime("%Y-%m-%d %H:%M")
+    page = page.replace("__UPDATED_AT__", now)
     with open(out, "w") as f:
         f.write(page)
     print(f"wrote {out}")

@@ -22,9 +22,14 @@
     }
    },
    "房型": {
-    "select": {
-     "name": "新人房"
-    }
+    "rich_text": [
+     {
+      "plain_text": "新人房"
+     }
+    ]
+   },
+   "房间号": {
+    "rich_text": []
    },
    "相邻组": {
     "select": {
@@ -64,7 +69,10 @@
     }
    },
    "房型": {
-    "select": null
+    "rich_text": []
+   },
+   "房间号": {
+    "rich_text": []
    },
    "相邻组": {
     "select": {
@@ -108,7 +116,10 @@
     }
    },
    "房型": {
-    "select": null
+    "rich_text": []
+   },
+   "房间号": {
+    "rich_text": []
    },
    "相邻组": {
     "select": null
@@ -150,7 +161,10 @@
     }
    },
    "房型": {
-    "select": null
+    "rich_text": []
+   },
+   "房间号": {
+    "rich_text": []
    },
    "相邻组": {
     "select": {
@@ -190,9 +204,14 @@
     }
    },
    "房型": {
-    "select": {
-     "name": "双床房"
-    }
+    "rich_text": [
+     {
+      "plain_text": "双床房"
+     }
+    ]
+   },
+   "房间号": {
+    "rich_text": []
    },
    "相邻组": {
     "select": {
@@ -232,7 +251,10 @@
     }
    },
    "房型": {
-    "select": null
+    "rich_text": []
+   },
+   "房间号": {
+    "rich_text": []
    },
    "相邻组": {
     "select": {
@@ -272,9 +294,14 @@
     }
    },
    "房型": {
-    "select": {
-     "name": "父母房"
-    }
+    "rich_text": [
+     {
+      "plain_text": "父母房"
+     }
+    ]
+   },
+   "房间号": {
+    "rich_text": []
    },
    "相邻组": {
     "select": {
@@ -314,7 +341,10 @@
     }
    },
    "房型": {
-    "select": null
+    "rich_text": []
+   },
+   "房间号": {
+    "rich_text": []
    },
    "相邻组": {
     "select": null
@@ -356,9 +386,14 @@
     }
    },
    "房型": {
-    "select": {
-     "name": "双床房"
-    }
+    "rich_text": [
+     {
+      "plain_text": "双床房"
+     }
+    ]
+   },
+   "房间号": {
+    "rich_text": []
    },
    "相邻组": {
     "select": {
@@ -402,7 +437,10 @@
     }
    },
    "房型": {
-    "select": null
+    "rich_text": []
+   },
+   "房间号": {
+    "rich_text": []
    },
    "相邻组": {
     "select": {
@@ -446,9 +484,14 @@
     }
    },
    "房型": {
-    "select": {
-     "name": "双床房"
-    }
+    "rich_text": [
+     {
+      "plain_text": "双床房"
+     }
+    ]
+   },
+   "房间号": {
+    "rich_text": []
    },
    "相邻组": {
     "select": null
@@ -486,7 +529,10 @@
     }
    },
    "房型": {
-    "select": null
+    "rich_text": []
+   },
+   "房间号": {
+    "rich_text": []
    },
    "相邻组": {
     "select": null
@@ -524,7 +570,10 @@
     }
    },
    "房型": {
-    "select": null
+    "rich_text": []
+   },
+   "房间号": {
+    "rich_text": []
    },
    "相邻组": {
     "select": {
@@ -564,9 +613,14 @@
     }
    },
    "房型": {
-    "select": {
-     "name": "家庭房"
-    }
+    "rich_text": [
+     {
+      "plain_text": "家庭房"
+     }
+    ]
+   },
+   "房间号": {
+    "rich_text": []
    },
    "相邻组": {
     "select": {
@@ -606,9 +660,14 @@
     }
    },
    "房型": {
-    "select": {
-     "name": "家庭房"
-    }
+    "rich_text": [
+     {
+      "plain_text": "家庭房"
+     }
+    ]
+   },
+   "房间号": {
+    "rich_text": []
    },
    "相邻组": {
     "select": {
@@ -648,7 +707,10 @@
     }
    },
    "房型": {
-    "select": null
+    "rich_text": []
+   },
+   "房间号": {
+    "rich_text": []
    },
    "相邻组": {
     "select": {
@@ -688,7 +750,10 @@
     }
    },
    "房型": {
-    "select": null
+    "rich_text": []
+   },
+   "房间号": {
+    "rich_text": []
    },
    "相邻组": {
     "select": {
@@ -728,9 +793,14 @@
     }
    },
    "房型": {
-    "select": {
-     "name": "双床房"
-    }
+    "rich_text": [
+     {
+      "plain_text": "双床房"
+     }
+    ]
+   },
+   "房间号": {
+    "rich_text": []
    },
    "相邻组": {
     "select": {
@@ -770,7 +840,10 @@
     }
    },
    "房型": {
-    "select": null
+    "rich_text": []
+   },
+   "房间号": {
+    "rich_text": []
    },
    "相邻组": {
     "select": null
@@ -808,7 +881,10 @@
     }
    },
    "房型": {
-    "select": null
+    "rich_text": []
+   },
+   "房间号": {
+    "rich_text": []
    },
    "相邻组": {
     "select": null
@@ -846,9 +922,14 @@
     }
    },
    "房型": {
-    "select": {
-     "name": "双床房"
-    }
+    "rich_text": [
+     {
+      "plain_text": "双床房"
+     }
+    ]
+   },
+   "房间号": {
+    "rich_text": []
    },
    "相邻组": {
     "select": null
@@ -886,9 +967,14 @@
     }
    },
    "房型": {
-    "select": {
-     "name": "双床房"
-    }
+    "rich_text": [
+     {
+      "plain_text": "双床房"
+     }
+    ]
+   },
+   "房间号": {
+    "rich_text": []
    },
    "相邻组": {
     "select": null
@@ -926,9 +1012,14 @@
     }
    },
    "房型": {
-    "select": {
-     "name": "双床房"
-    }
+    "rich_text": [
+     {
+      "plain_text": "双床房"
+     }
+    ]
+   },
+   "房间号": {
+    "rich_text": []
    },
    "相邻组": {
     "select": null
@@ -966,7 +1057,10 @@
     }
    },
    "房型": {
-    "select": null
+    "rich_text": []
+   },
+   "房间号": {
+    "rich_text": []
    },
    "相邻组": {
     "select": null
@@ -1004,7 +1098,10 @@
     }
    },
    "房型": {
-    "select": null
+    "rich_text": []
+   },
+   "房间号": {
+    "rich_text": []
    },
    "相邻组": {
     "select": null
@@ -1038,7 +1135,10 @@
     "date": null
    },
    "房型": {
-    "select": null
+    "rich_text": []
+   },
+   "房间号": {
+    "rich_text": []
    },
    "相邻组": {
     "select": null

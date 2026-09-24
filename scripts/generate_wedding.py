@@ -8,7 +8,7 @@
 本地测试: python3 scripts/generate_wedding.py --fixture tests/fixtures/notion_rows.json
 
 数据库属性: 姓名(title) 入住人数(number) 抵达(date) 返回(date)
-           房型(select) 相邻组(select) 备注(rich_text) 状态(select)
+           房型(rich_text) 房间号(rich_text) 相邻组(select) 备注(rich_text) 状态(select)
 """
 import argparse
 import datetime as dt
@@ -60,6 +60,10 @@ def parse_rows(results):
                 return "".join(t["plain_text"] for t in v.get("title") or []).strip()
             if kind == "rich_text":
                 return "".join(t["plain_text"] for t in v.get("rich_text") or []).strip()
+            if kind == "text":  # rich_text，兼容旧的 select 类型
+                if "select" in v:
+                    return (v["select"] or {}).get("name") or None
+                return "".join(t["plain_text"] for t in v.get("rich_text") or []).strip() or None
             if kind == "number":
                 return v.get("number")
             if kind == "select":
@@ -78,7 +82,8 @@ def parse_rows(results):
             "people": plain("入住人数", "number") or 0,
             "arrive": plain("抵达", "date"),
             "depart": plain("返回", "date"),
-            "room": plain("房型", "select"),
+            "room": plain("房型", "text"),
+            "room_no": plain("房间号", "text"),
             "group": plain("相邻组", "select"),
             "note": plain("备注", "rich_text"),
             "status": plain("状态", "select"),
@@ -131,13 +136,14 @@ def build(guests):
         left = (g["arrive"] - start).days * 100 / n_nights
         width = nights * 100 / n_nights
         adj = f'<i class="adj {ADJ_CLASS[g["group"]]}">{g["group"]}</i>' if g["group"] in ADJ_CLASS else ""
-        tag = f'<span class="{ROOM_TAG_CLASS[g["room"]]}">{g["room"]}</span>' if g["room"] in ROOM_TAG_CLASS else ""
+        tag = f'<span class="{ROOM_TAG_CLASS.get(g["room"], "tag")}">{esc(g["room"])}</span>' if g["room"] else ""
+        room_no = f'<span class="roomno">{esc(g["room_no"])}</span>' if g["room_no"] else ""
         n1 = " n1" if nights == 1 else ""
         people = int(g["people"] or 0)
-        title = esc(f'{g["name"]} · {people}人 · {g["arrive"].month}/{g["arrive"].day} 入住，'
+        title = html.escape(f'{g["name"]}{" · " + g["room_no"] if g["room_no"] else ""} · {people}人 · {g["arrive"].month}/{g["arrive"].day} 入住，'
                     f'{g["depart"].month}/{g["depart"].day} 退房，{nights}晚')
         row_html.append(
-            f'    <div class="row body-row"><div><span class="name">{esc(g["name"])}</span>{adj}</div>'
+            f'    <div class="row body-row"><div><span class="name">{esc(g["name"])}</span>{room_no}{adj}</div>'
             f'<div class="num">{people}</div>'
             f'<div class="date">{d_label(g["arrive"])}</div><div class="date">{d_label(g["depart"])}</div>'
             f'<div class="note">{tag}</div>'
@@ -238,11 +244,11 @@ TEMPLATE = """<!DOCTYPE html>
   .stat small {{ font-size: 12px; color: var(--faint); font-weight: 400; }}
 
   .scroll {{ overflow-x: auto; }}
-  .chart {{ min-width: 940px; background: var(--card); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }}
+  .chart {{ min-width: 968px; background: var(--card); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }}
 
   .row {{
     display: grid;
-    grid-template-columns: 172px 52px 78px 78px 92px 1fr;
+    grid-template-columns: 200px 52px 78px 78px 92px 1fr;
     align-items: stretch;
   }}
   .row > div {{ padding: 0 10px; display: flex; align-items: center; min-height: 34px; }}
@@ -255,6 +261,7 @@ TEMPLATE = """<!DOCTYPE html>
 
   .row > div:first-child {{ min-width: 0; }}
   .name {{ min-width: 0; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; line-height: 34px; }}
+  .roomno {{ flex: none; margin-left: 6px; font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }}
   .num {{ justify-content: center; font-variant-numeric: tabular-nums; color: var(--ink); }}
   .num.zero {{ color: var(--faint); }}
   .date {{ font-variant-numeric: tabular-nums; color: var(--muted); font-size: 13px; white-space: nowrap; }}

@@ -9,7 +9,7 @@ gw = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(gw)
 
 
-def page(room=None, room_no=None, name="张三"):
+def page(room=None, room_no=None, name="张三", owner=None):
     props = {
         "姓名": {"title": [{"plain_text": name}]},
         "入住人数": {"number": 2},
@@ -18,6 +18,7 @@ def page(room=None, room_no=None, name="张三"):
         "相邻组": {"select": None},
         "备注": {"rich_text": []},
         "状态": {"select": {"name": "已确定"}},
+        "确认人": {"select": {"name": owner} if owner else None},
     }
     if room is not None:
         props["房型"] = room
@@ -88,10 +89,20 @@ class BuildTest(unittest.TestCase):
         html = gw.build(gw.parse_rows([page()]))
         self.assertIn("@media (max-width: 760px)", html)
 
-    def test_total_people_excludes_staff_in_parentheses(self):
-        rows = [page(name="张三"), page(name="摄影老师x2"), page(name="管家老师")]
+    def test_headcount_legend_by_owner(self):
+        rows = [page(name="张三", owner="臧义程"), page(name="李四", owner="程永明"),
+                page(name="王五", owner="臧晓军"), page(name="赵六", owner="陈景怡"),
+                page(name="摄影老师x2", owner="陈景怡")]
         html = gw.build(gw.parse_rows(rows))
-        self.assertIn('<b>6 <small>人</small></b><span>入住总人数<i class="nw" title="不含摄影、摄像、跟妆、管家等工作人员">（宾客 2 人）</i></span>', html)
+        self.assertIn("<b>10 <small>人</small></b><span>入住总人数</span>", html)
+        self.assertIn("宾客 <b>8</b> 人（不含摄影、摄像、跟妆、管家等工作人员 2 人）", html)
+        self.assertIn("臧义程 / 程永明 / 臧晓军 负责 <b>6</b> 人", html)
+        self.assertIn("陈景怡 负责 <b>2</b> 人", html)
+        self.assertNotIn("未填确认人", html)
+
+    def test_headcount_legend_reports_missing_owner(self):
+        html = gw.build(gw.parse_rows([page(name="张三")]))
+        self.assertIn("未填确认人 <b>2</b> 人", html)
 
 
 if __name__ == "__main__":

@@ -88,6 +88,11 @@ class BuildTest(unittest.TestCase):
         html = gw.build(gw.parse_rows([page()]))
         self.assertIn("@media (max-width: 760px)", html)
 
+    def test_total_people_excludes_staff_in_parentheses(self):
+        rows = [page(name="张三"), page(name="摄影老师x2"), page(name="管家老师")]
+        html = gw.build(gw.parse_rows(rows))
+        self.assertIn('<b>6 <small>人</small></b><span>入住总人数<i class="nw" title="不含摄影、摄像、跟妆、管家等工作人员">（宾客 2 人）</i></span>', html)
+
 
 if __name__ == "__main__":
     unittest.main()

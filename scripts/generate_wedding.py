@@ -23,7 +23,9 @@ OUT_PATH = os.path.join(os.path.dirname(__file__), "..", "wedding", "index.html"
 WEEKDAY = "一二三四五六日"  # Monday=0
 ROOM_TAG_CLASS = {"新人房": "tag new", "父母房": "tag par", "家庭房": "tag fam", "双床房": "tag"}
 ADJ_ORDER = "ABCD"
-STAFF_MARK = "老师"  # 姓名含此字样视为工作人员（摄影/摄像/跟妆/管家），不计入用餐人数
+STAFF_MARK = "老师"  # 姓名含此字样视为工作人员（摄影/摄像/跟妆/管家），不计入宾客人数
+# 按「确认人」汇总宾客人数的分组
+OWNER_GROUPS = [("臧义程", "程永明", "臧晓军"), ("陈景怡",)]
 ADJ_CLASS = {"A": "a", "B": "b", "C": "c", "D": "d"}
 
 
@@ -88,6 +90,7 @@ def parse_rows(results):
             "group": plain("相邻组", "select"),
             "note": plain("备注", "rich_text"),
             "status": plain("状态", "select"),
+            "owner": plain("确认人", "select"),
         })
     return guests
 
@@ -129,7 +132,19 @@ def build(guests):
         night_counts.append(sum(1 for g in scheduled if g["arrive"] <= nd < g["depart"]))
     peak_i = max(range(n_nights), key=lambda i: night_counts[i])
     total_people = sum(int(g["people"] or 0) for g in scheduled)
-    guest_people = sum(int(g["people"] or 0) for g in scheduled if STAFF_MARK not in g["name"])
+    guests = [g for g in scheduled if STAFF_MARK not in g["name"]]
+    guest_people = sum(int(g["people"] or 0) for g in guests)
+    owner_parts = []
+    known = set()
+    for group in OWNER_GROUPS:
+        known.update(group)
+        n = sum(int(g["people"] or 0) for g in guests if g["owner"] in group)
+        owner_parts.append(f'{" / ".join(group)} 负责 <b>{n}</b> 人')
+    unowned = sum(int(g["people"] or 0) for g in guests if g["owner"] not in known)
+    if unowned:
+        owner_parts.append(f"未填确认人 <b>{unowned}</b> 人")
+    headcount = (f"宾客 <b>{guest_people}</b> 人（不含摄影、摄像、跟妆、管家等工作人员 "
+                 f"{total_people - guest_people} 人）<br>\n      " + "；".join(owner_parts))
 
     grid = "<i></i>" * (n_nights - 1) + '<i class="last"></i>'
 
@@ -187,7 +202,7 @@ def build(guests):
         peak_count=night_counts[peak_i],
         peak_label=f"{peak_nd.month}/{peak_nd.day}",
         total_people=total_people,
-        guest_people=guest_people,
+        headcount=headcount,
         grid=grid,
         nightlabels=nightlabels,
         rows="\n".join(row_html),
@@ -249,7 +264,6 @@ TEMPLATE = """<!DOCTYPE html>
   }}
   .stat b {{ display: block; font-size: 22px; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--red-deep); }}
   .stat span {{ font-size: 12px; color: var(--muted); letter-spacing: .08em; }}
-  .stat .nw {{ font-style: normal; display: block; font-size: 11px; color: var(--faint); letter-spacing: 0; }}
   .stat small {{ font-size: 12px; color: var(--faint); font-weight: 400; }}
 
   .scroll {{ overflow-x: auto; }}
@@ -404,7 +418,7 @@ TEMPLATE = """<!DOCTYPE html>
   <div class="stats">
     <div class="stat"><b>{n_groups} <small>组</small></b><span>已排入住</span></div>
     <div class="stat"><b>{peak_count} <small>组</small></b><span>峰值夜 · {peak_label}</span></div>
-    <div class="stat"><b>{total_people} <small>人</small></b><span>入住总人数<i class="nw" title="不含摄影、摄像、跟妆、管家等工作人员">（宾客 {guest_people} 人）</i></span></div>
+    <div class="stat"><b>{total_people} <small>人</small></b><span>入住总人数</span></div>
   </div>
 
   <div class="scroll">
@@ -433,6 +447,8 @@ TEMPLATE = """<!DOCTYPE html>
   </div>
 
   <dl class="legend">
+    <dt>人数</dt>
+    <dd>{headcount}</dd>
     <dt>读法</dt>
     <dd>时间轴每列代表一晚住宿：红条盖到哪列，就住哪晚（如 10/5 抵达、10/6 返回＝只住「10/5 晚」一列）。「入住」为每组入住人数。</dd>
     <dt>房型</dt>

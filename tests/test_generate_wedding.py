@@ -73,6 +73,12 @@ class BuildTest(unittest.TestCase):
         html = gw.build(gw.parse_rows([page(room=text("大床房"))]))
         self.assertIn('<span class="tag">大床房</span>', html)
 
+    def test_long_name_not_truncated(self):
+        html = gw.build(gw.parse_rows([page(name="张博（伴）王永恒 & 杨子丰")]))
+        name_css = next(l for l in html.splitlines() if l.strip().startswith(".name {"))
+        self.assertNotIn("ellipsis", name_css)
+        self.assertNotIn("nowrap", name_css)
+
 
 if __name__ == "__main__":
     unittest.main()

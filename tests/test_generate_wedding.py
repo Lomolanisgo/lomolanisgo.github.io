@@ -79,6 +79,15 @@ class BuildTest(unittest.TestCase):
         self.assertNotIn("ellipsis", name_css)
         self.assertNotIn("nowrap", name_css)
 
+    def test_dates_have_long_and_short_labels(self):
+        html = gw.build(gw.parse_rows([page()]))
+        self.assertIn('<div class="date"><span class="dl">10/3 六</span><span class="ds">3</span></div>', html)
+        self.assertIn('<div class="date"><span class="dl">10/5 一</span><span class="ds">5</span></div>', html)
+
+    def test_mobile_media_query_present(self):
+        html = gw.build(gw.parse_rows([page()]))
+        self.assertIn("@media (max-width: 760px)", html)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -26,6 +26,9 @@ ADJ_ORDER = "ABCD"
 STAFF_MARK = "老师"  # 姓名含此字样视为工作人员（摄影/摄像/跟妆/管家），不计入宾客人数
 # 按「确认人」汇总宾客人数的分组
 OWNER_GROUPS = [("臧义程", "程永明", "臧晓军"), ("陈景怡",)]
+COUPLE = ("臧义程", "陈景怡")  # 新人单列，不计入各方负责人数
+GROOMSMAN_MARK = "（伴）"  # 伴郎单列，不计入各方负责人数
+PENDING_STATUS = "待定"  # 未确定的不计入任何人数
 ADJ_CLASS = {"A": "a", "B": "b", "C": "c", "D": "d"}
 
 
@@ -131,20 +134,32 @@ def build(guests):
     for nd in night_dates:
         night_counts.append(sum(1 for g in scheduled if g["arrive"] <= nd < g["depart"]))
     peak_i = max(range(n_nights), key=lambda i: night_counts[i])
-    total_people = sum(int(g["people"] or 0) for g in scheduled)
-    guests = [g for g in scheduled if STAFF_MARK not in g["name"]]
+    counted = [g for g in scheduled if g["status"] != PENDING_STATUS]
+    total_people = sum(int(g["people"] or 0) for g in counted)
+    guests = [g for g in counted if STAFF_MARK not in g["name"]]
     guest_people = sum(int(g["people"] or 0) for g in guests)
+
+    def split(g):
+        # 一行里的新人 / 伴郎人数，其余计入确认人
+        couple = sum(1 for n in COUPLE if n in g["name"])
+        groomsmen = g["name"].count(GROOMSMAN_MARK)
+        return couple, groomsmen, max(int(g["people"] or 0) - couple - groomsmen, 0)
+
+    couple_n = sum(split(g)[0] for g in guests)
+    groomsmen_n = sum(split(g)[1] for g in guests)
     owner_parts = []
     known = set()
     for group in OWNER_GROUPS:
         known.update(group)
-        n = sum(int(g["people"] or 0) for g in guests if g["owner"] in group)
+        n = sum(split(g)[2] for g in guests if g["owner"] in group)
         owner_parts.append(f'{" / ".join(group)} 负责 <b>{n}</b> 人')
-    unowned = sum(int(g["people"] or 0) for g in guests if g["owner"] not in known)
+    unowned = sum(split(g)[2] for g in guests if g["owner"] not in known)
     if unowned:
         owner_parts.append(f"未填确认人 <b>{unowned}</b> 人")
     headcount = (f"宾客 <b>{guest_people}</b> 人（不含摄影、摄像、跟妆、管家等工作人员 "
-                 f"{total_people - guest_people} 人）<br>\n      " + "；".join(owner_parts))
+                 f"{total_people - guest_people} 人）<br>\n"
+                 f"      新人 <b>{couple_n}</b> 人；伴郎 <b>{groomsmen_n}</b> 人<br>\n      "
+                 + "；".join(owner_parts))
 
     grid = "<i></i>" * (n_nights - 1) + '<i class="last"></i>'
 
@@ -187,7 +202,7 @@ def build(guests):
     adj_html = "<br>\n".join(adj_lines)
 
     if undated:
-        pending = "、".join(f'<b>{esc(g["name"])}</b>（{int(g["people"] or 0)} 人）' for g in undated) + "，确认后补入。"
+        pending = "、".join(f'<b>{esc(g["name"])}</b>' for g in undated) + "，确认后补入（不计入人数）。"
     else:
         pending = "无。"
 

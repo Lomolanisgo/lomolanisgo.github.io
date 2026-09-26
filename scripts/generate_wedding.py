@@ -95,6 +95,11 @@ def d_label(d):
     return f"{d.month}/{d.day} {WEEKDAY[d.weekday()]}"
 
 
+def date_cell(d):
+    # 长标签桌面用，短标签（只有日）窄屏用
+    return f'<div class="date"><span class="dl">{d_label(d)}</span><span class="ds">{d.day}</span></div>'
+
+
 def pct(v):
     return f"{v:g}"
 
@@ -145,7 +150,7 @@ def build(guests):
         row_html.append(
             f'    <div class="row body-row"><div><span class="name">{esc(g["name"])}</span>{room_no}{adj}</div>'
             f'<div class="num">{people}</div>'
-            f'<div class="date">{d_label(g["arrive"])}</div><div class="date">{d_label(g["depart"])}</div>'
+            f'{date_cell(g["arrive"])}{date_cell(g["depart"])}'
             f'<div class="note">{tag}</div>'
             f'<div class="tl"><div class="tl-grid">{grid}</div>'
             f'<div class="bar{n1}" style="left:{pct(left)}%;width:{pct(width)}%" title="{title}">'
@@ -336,6 +341,46 @@ TEMPLATE = """<!DOCTYPE html>
   .pagefoot a.syncbtn {{ color: var(--red-deep); text-decoration: none; border: 1px solid var(--line-strong); border-radius: 4px; padding: 2px 8px; margin-left: 6px; background: var(--card); }}
   .pagefoot a.syncbtn:hover {{ background: var(--red-wash); }}
 
+  .ds {{ display: none; }}
+
+  /* 窄屏：不横向滚动；每组第一行是文字信息，第二行是整宽时间轴，日期只显示「日」 */
+  @media (max-width: 760px) {{
+    body {{ padding: 24px 16px 40px; }}
+    h1 {{ font-size: 24px; }}
+    .stats {{ gap: 8px; margin: 16px 0 20px; }}
+    .stat {{ flex: 1 1 0; min-width: 0; padding: 8px 10px; }}
+    .stat b {{ font-size: 20px; }}
+    .scroll {{ overflow: visible; }}
+    .chart {{ min-width: 0; }}
+    .dl {{ display: none; }}
+    .ds {{ display: inline; }}
+    .row {{ grid-template-columns: minmax(0, 1fr) 24px 26px 26px 98px; }}
+    .row > div {{ padding: 0 3px; }}
+    .row > div:first-child {{ padding-left: 10px; }}
+    .row > div:nth-child(5) {{ padding-right: 8px; }}
+    .date {{ justify-content: center; font-size: 14px; color: var(--ink); }}
+    .head > div {{ letter-spacing: 0; justify-content: center; }}
+    .head > div:first-child {{ justify-content: flex-start; }}
+    .tl {{ grid-column: 1 / -1; min-height: 22px !important; margin: 0 8px 6px 10px; }}
+    .head .tl {{ min-height: 26px !important; margin-bottom: 0; }}
+    .nightlabels em {{ font-size: 11px; }}
+    .bar {{ height: 14px; }}
+    .bar em {{ font-size: 10px; }}
+    .tag {{ display: inline-block; text-align: center; line-height: 1.3; padding: 2px 5px; }}
+    .pagefoot a.syncbtn {{ white-space: nowrap; display: inline-block; margin: 6px 0 0; }}
+    .totals .label {{ grid-column: 1 / -1; justify-content: flex-start; padding-top: 6px; }}
+    .totals .tl {{ min-height: 40px !important; }}
+    .legend {{ grid-template-columns: 1fr; gap: 2px; }}
+    .legend dd {{ margin-bottom: 8px; }}
+    .legend .adj-item {{ display: block; white-space: normal; margin-right: 0; }}
+  }}
+  @media (max-width: 400px) {{
+    .name {{ font-size: 13px; }}
+    .row {{ grid-template-columns: minmax(0, 1fr) 22px 24px 24px 94px; }}
+    .adj {{ margin-left: 4px; }}
+    .stat span {{ font-size: 11px; letter-spacing: 0; }}
+  }}
+
   @media print {{
     body {{ padding: 0; background: #FFFFFF; }}
     .scroll {{ overflow: visible; }}
@@ -361,7 +406,7 @@ TEMPLATE = """<!DOCTYPE html>
   <div class="scroll">
   <div class="chart">
     <div class="row head">
-      <div>姓名</div><div style="justify-content:center">入住</div><div>抵达</div><div>返回</div><div>备注</div>
+      <div>姓名</div><div style="justify-content:center"><span class="dl">入住</span><span class="ds">人</span></div><div><span class="dl">抵达</span><span class="ds">抵</span></div><div><span class="dl">返回</span><span class="ds">返</span></div><div><span class="dl">备注</span><span class="ds">房间</span></div>
       <div class="tl">
         <div class="tl-grid">{grid}</div>
         <div class="nightlabels">

@@ -8,7 +8,7 @@
 本地测试: python3 scripts/generate_wedding.py --fixture tests/fixtures/notion_rows.json
 
 数据库属性: 姓名(title) 入住人数(number) 抵达(date) 返回(date)
-           房型(rich_text) 房间号(rich_text) 相邻组(select) 备注(rich_text) 状态(select)
+           房型(rich_text，如「8203 湖景标间」) 相邻组(select) 状态(select)
 """
 import argparse
 import datetime as dt
@@ -244,11 +244,11 @@ TEMPLATE = """<!DOCTYPE html>
   .stat small {{ font-size: 12px; color: var(--faint); font-weight: 400; }}
 
   .scroll {{ overflow-x: auto; }}
-  .chart {{ min-width: 968px; background: var(--card); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }}
+  .chart {{ min-width: 1036px; background: var(--card); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }}
 
   .row {{
     display: grid;
-    grid-template-columns: 200px 52px 78px 78px 92px 1fr;
+    grid-template-columns: 240px 52px 78px 78px 120px 1fr;
     align-items: stretch;
   }}
   .row > div {{ padding: 0 10px; display: flex; align-items: center; min-height: 34px; }}
@@ -260,7 +260,7 @@ TEMPLATE = """<!DOCTYPE html>
   .head .tl {{ padding: 0; }}
 
   .row > div:first-child {{ min-width: 0; }}
-  .name {{ min-width: 0; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; line-height: 34px; }}
+  .name {{ min-width: 0; font-weight: 500; line-height: 1.35; padding: 7px 0; overflow-wrap: anywhere; }}
   .roomno {{ flex: none; margin-left: 6px; font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }}
   .num {{ justify-content: center; font-variant-numeric: tabular-nums; color: var(--ink); }}
   .num.zero {{ color: var(--faint); }}
@@ -275,7 +275,7 @@ TEMPLATE = """<!DOCTYPE html>
 
   .tag {{
     border: 1px solid #E5C9C2; border-radius: 3px; padding: 1px 6px;
-    font-size: 11px; color: var(--red-deep); background: var(--red-wash); white-space: nowrap;
+    font-size: 11px; color: var(--red-deep); background: var(--red-wash);
   }}
   .tag.fam {{ color: var(--gold); background: #F6F0E3; border-color: #E0D2B4; }}
   .tag.new {{ color: #FCF6EF; background: var(--red); border-color: var(--red-deep); }}

@@ -53,11 +53,11 @@
   .stat small { font-size: 12px; color: var(--faint); font-weight: 400; }
 
   .scroll { overflow-x: auto; }
-  .chart { min-width: 968px; background: var(--card); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+  .chart { min-width: 1036px; background: var(--card); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
 
   .row {
     display: grid;
-    grid-template-columns: 200px 52px 78px 78px 92px 1fr;
+    grid-template-columns: 240px 52px 78px 78px 120px 1fr;
     align-items: stretch;
   }
   .row > div { padding: 0 10px; display: flex; align-items: center; min-height: 34px; }
@@ -69,7 +69,7 @@
   .head .tl { padding: 0; }
 
   .row > div:first-child { min-width: 0; }
-  .name { min-width: 0; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; line-height: 34px; }
+  .name { min-width: 0; font-weight: 500; line-height: 1.35; padding: 7px 0; overflow-wrap: anywhere; }
   .roomno { flex: none; margin-left: 6px; font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
   .num { justify-content: center; font-variant-numeric: tabular-nums; color: var(--ink); }
   .num.zero { color: var(--faint); }
@@ -84,7 +84,7 @@
 
   .tag {
     border: 1px solid #E5C9C2; border-radius: 3px; padding: 1px 6px;
-    font-size: 11px; color: var(--red-deep); background: var(--red-wash); white-space: nowrap;
+    font-size: 11px; color: var(--red-deep); background: var(--red-wash);
   }
   .tag.fam { color: var(--gold); background: #F6F0E3; border-color: #E0D2B4; }
   .tag.new { color: #FCF6EF; background: var(--red); border-color: var(--red-deep); }
@@ -240,7 +240,7 @@
     <dd><b>王泽轩</b>（2 人），确认后补入。</dd>
   </dl>
 
-  <p class="pagefoot">数据更新于 2026-09-26 13:39（北京时间）· 数据源 Notion，每 30 分钟自动同步<a class="syncbtn" href="https://github.com/Lomolanisgo/lomolanisgo.github.io/actions/workflows/update-wedding.yml" target="_blank" rel="noopener">🔄 立即同步</a></p>
+  <p class="pagefoot">数据更新于 2026-09-26 17:08（北京时间）· 数据源 Notion，每 30 分钟自动同步<a class="syncbtn" href="https://github.com/Lomolanisgo/lomolanisgo.github.io/actions/workflows/update-wedding.yml" target="_blank" rel="noopener">🔄 立即同步</a></p>
 </div>
 </body>
 </html>

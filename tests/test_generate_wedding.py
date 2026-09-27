@@ -126,6 +126,12 @@ class BuildTest(unittest.TestCase):
         self.assertIn("未填确认人 <b>2</b> 人", html)
 
 
+    def test_chart_fits_sheet_on_desktop(self):
+        html = gw.build(gw.parse_rows([page()]))
+        sheet = int(re.search(r"\.sheet \{ max-width: (\d+)px", html).group(1))
+        chart = int(re.search(r"\.chart \{ min-width: (\d+)px", html).group(1))
+        self.assertLessEqual(chart, sheet)
+
 
 class SortTest(unittest.TestCase):
     def test_rows_carry_sort_keys(self):

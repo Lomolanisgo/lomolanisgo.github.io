@@ -1,6 +1,10 @@
 """运行: python3 -m unittest discover -s tests"""
 import importlib.util
+import json
 import os
+import re
+import shutil
+import subprocess
 import unittest
 
 _spec = importlib.util.spec_from_file_location(
@@ -103,6 +107,13 @@ class BuildTest(unittest.TestCase):
         self.assertIn("陈景怡 负责 <b>2</b> 人", html)
         self.assertNotIn("未填确认人", html)
 
+    def test_star_marks_groomsman(self):
+        rows = [page(name="张博* & 王永恒 & 杨子丰", owner="臧义程", people=3),
+                page(name="周恒*", owner="臧义程", people=1)]
+        html = gw.build(gw.parse_rows(rows))
+        self.assertIn("伴郎 <b>2</b> 人", html)
+        self.assertIn("臧义程 / 程永明 / 臧晓军 负责 <b>2</b> 人", html)
+
     def test_pending_rows_not_counted(self):
         rows = [page(name="张三", owner="臧义程"),
                 page(name="待定人", owner="臧义程", status="待定")]
@@ -113,6 +124,52 @@ class BuildTest(unittest.TestCase):
     def test_headcount_legend_reports_missing_owner(self):
         html = gw.build(gw.parse_rows([page(name="张三")]))
         self.assertIn("未填确认人 <b>2</b> 人", html)
+
+
+
+class SortTest(unittest.TestCase):
+    def test_rows_carry_sort_keys(self):
+        rows = [page(name="张三", room=text("8203 湖景标间")), page(name="李四")]
+        rows[0]["properties"]["相邻组"] = {"select": {"name": "B"}}
+        html = gw.build(gw.parse_rows(rows))
+        self.assertIn('data-arrive="2026-10-03" data-room="8203" data-group="B"', html)
+        self.assertIn('data-arrive="2026-10-03" data-room="" data-group=""', html)
+
+    def test_sorter_controls_present(self):
+        html = gw.build(gw.parse_rows([page()]))
+        self.assertIn('id="sorter"', html)
+        for key in ("arrive", "room", "group"):
+            self.assertIn(f'data-key="{key}"', html)
+
+    def test_mobile_hides_people_and_date_columns(self):
+        html = gw.build(gw.parse_rows([page()]))
+        mobile = html[html.index("@media (max-width: 760px)"):]
+        self.assertIn(".num, .date,", mobile[:mobile.index("@media print")])
+
+    @unittest.skipUnless(shutil.which("node"), "node not installed")
+    def test_sort_order_logic(self):
+        js = gw.SORT_JS
+        items = [
+            {"idx": 0, "arrive": "2026-10-03", "room": "8303", "group": ""},
+            {"idx": 1, "arrive": "2026-10-03", "room": "8102", "group": "B"},
+            {"idx": 2, "arrive": "2026-10-04", "room": "", "group": "A"},
+            {"idx": 3, "arrive": "2026-10-04", "room": "8201", "group": "B"},
+        ]
+        cases = {
+            ("arrive", ""): [0, 1, 2, 3],
+            ("room", ""): [1, 3, 0, 2],          # 无房号排最后
+            ("group", ""): [2, 1, 3, 0],         # 无分组排最后
+            ("group", "room"): [2, 1, 3, 0],
+            ("group", "arrive"): [2, 1, 3, 0],
+            ("arrive", "room"): [1, 0, 3, 2],
+            ("arrive", "group"): [1, 0, 2, 3],
+        }
+        script = js + "\nconst items=" + json.dumps(items) + ";\nconst cases=" + json.dumps(
+            [list(k) for k in cases]) + ";\nconsole.log(JSON.stringify(cases.map(c => " \
+            "module.exports.order(items, c[0], c[1]).map(x => x.idx))));"
+        out = subprocess.run(["node", "-e", "var module={exports:{}};" + script],
+                             capture_output=True, text=True, check=True).stdout
+        self.assertEqual(json.loads(out), list(cases.values()))
 
 
 if __name__ == "__main__":

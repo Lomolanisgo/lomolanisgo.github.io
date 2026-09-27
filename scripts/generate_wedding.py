@@ -27,7 +27,7 @@ STAFF_MARK = "老师"  # 姓名含此字样视为工作人员（摄影/摄像/�
 # 按「确认人」汇总宾客人数的分组
 OWNER_GROUPS = [("臧义程", "程永明", "臧晓军"), ("陈景怡",)]
 COUPLE = ("臧义程", "陈景怡")  # 新人单列，不计入各方负责人数
-GROOMSMAN_MARK = "（伴）"  # 伴郎单列，不计入各方负责人数
+GROOMSMAN_MARKS = ("*", "（伴）")  # 姓名里带这些标记的是伴郎，单列，不计入各方负责人数
 PENDING_STATUS = "待定"  # 未确定的不计入任何人数
 ADJ_CLASS = {"A": "a", "B": "b", "C": "c", "D": "d"}
 
@@ -98,8 +98,68 @@ def parse_rows(results):
     return guests
 
 
+# 浏览器端排序：首要 / 次要排序键；缺值排最后，同值保持生成时顺序
+SORT_JS = r"""
+(function () {
+  function cmpBy(key, a, b) {
+    var x = a[key], y = b[key];
+    if (x === y) return 0;
+    if (x === "") return 1;
+    if (y === "") return -1;
+    if (key === "room") return Number(x) - Number(y);
+    return x < y ? -1 : 1;
+  }
+  function order(items, primary, secondary) {
+    return items.slice().sort(function (a, b) {
+      return cmpBy(primary, a, b) || (secondary ? cmpBy(secondary, a, b) : 0) || a.idx - b.idx;
+    });
+  }
+  if (typeof module !== "undefined") module.exports = { order: order };
+  if (typeof document === "undefined") return;
+
+  var sorter = document.getElementById("sorter");
+  var chart = document.querySelector(".chart");
+  var totals = chart.querySelector(".totals");
+  var rows = Array.prototype.map.call(chart.querySelectorAll(".body-row"), function (el, i) {
+    return { el: el, idx: i, arrive: el.dataset.arrive, room: el.dataset.room, group: el.dataset.group };
+  });
+  var state = { primary: "arrive", secondary: "" };
+  try {
+    var saved = JSON.parse(localStorage.getItem("wedding-sort") || "null");
+    if (saved && saved.primary) state = saved;
+  } catch (e) {}
+
+  function render() {
+    if (state.secondary === state.primary) state.secondary = "";
+    order(rows, state.primary, state.secondary).forEach(function (r) { chart.insertBefore(r.el, totals); });
+    Array.prototype.forEach.call(sorter.querySelectorAll(".seg"), function (seg) {
+      var level = seg.dataset.level;
+      Array.prototype.forEach.call(seg.querySelectorAll("button"), function (b) {
+        b.setAttribute("aria-pressed", String(b.dataset.key === state[level]));
+        b.disabled = level === "secondary" && b.dataset.key !== "" && b.dataset.key === state.primary;
+      });
+    });
+    try { localStorage.setItem("wedding-sort", JSON.stringify(state)); } catch (e) {}
+  }
+  sorter.addEventListener("click", function (ev) {
+    var b = ev.target.closest("button");
+    if (!b || b.disabled) return;
+    state[b.closest(".seg").dataset.level] = b.dataset.key;
+    render();
+  });
+  sorter.hidden = false;
+  render();
+})();
+"""
+
+
 def d_label(d):
     return f"{d.month}/{d.day} {WEEKDAY[d.weekday()]}"
+
+
+def room_digits(room):
+    m = re.match(r"\s*(\d+)", room or "")
+    return m.group(1) if m else ""
 
 
 def date_cell(d):
@@ -142,7 +202,7 @@ def build(guests):
     def split(g):
         # 一行里的新人 / 伴郎人数，其余计入确认人
         couple = sum(1 for n in COUPLE if n in g["name"])
-        groomsmen = g["name"].count(GROOMSMAN_MARK)
+        groomsmen = sum(g["name"].count(m) for m in GROOMSMAN_MARKS)
         return couple, groomsmen, max(int(g["people"] or 0) - couple - groomsmen, 0)
 
     couple_n = sum(split(g)[0] for g in guests)
@@ -158,7 +218,7 @@ def build(guests):
         owner_parts.append(f"未填确认人 <b>{unowned}</b> 人")
     headcount = (f"宾客 <b>{guest_people}</b> 人（不含摄影、摄像、跟妆、管家等工作人员 "
                  f"{total_people - guest_people} 人）<br>\n"
-                 f"      新人 <b>{couple_n}</b> 人；伴郎 <b>{groomsmen_n}</b> 人<br>\n      "
+                 f"      新人 <b>{couple_n}</b> 人；伴郎 <b>{groomsmen_n}</b> 人（姓名带 *）<br>\n      "
                  + "；".join(owner_parts))
 
     grid = "<i></i>" * (n_nights - 1) + '<i class="last"></i>'
@@ -180,7 +240,8 @@ def build(guests):
         title = html.escape(f'{g["name"]}{" · " + g["room_no"] if g["room_no"] else ""} · {people}人 · {g["arrive"].month}/{g["arrive"].day} 入住，'
                     f'{g["depart"].month}/{g["depart"].day} 退房，{nights}晚')
         row_html.append(
-            f'    <div class="row body-row"><div><span class="name">{esc(g["name"])}</span>{room_no}{adj}</div>'
+            f'    <div class="row body-row" data-arrive="{g["arrive"].isoformat()}" '
+            f'data-room="{room_digits(g["room"])}" data-group="{g["group"] if g["group"] in ADJ_CLASS else ""}"><div><span class="name">{esc(g["name"])}</span>{room_no}{adj}</div>'
             f'<div class="num">{people}</div>'
             f'{date_cell(g["arrive"])}{date_cell(g["depart"])}'
             f'<div class="note">{tag}</div>'
@@ -224,6 +285,7 @@ def build(guests):
         totals=totals,
         adj_lines=adj_html,
         pending=pending,
+        sort_js=SORT_JS,
     )
 
 
@@ -377,6 +439,20 @@ TEMPLATE = """<!DOCTYPE html>
   .ds {{ display: none; }}
 
   /* 窄屏：不横向滚动；每组第一行是文字信息，第二行是整宽时间轴，日期只显示「日」 */
+  /* 排序器 */
+  .sorter {{ display: flex; flex-wrap: wrap; gap: 8px 24px; margin: 0 0 12px; font-size: 13px; }}
+  .sorter[hidden] {{ display: none; }}
+  .sort-line {{ display: flex; align-items: center; gap: 8px; }}
+  .sort-label {{ font-size: 12px; font-weight: 700; color: var(--gold); letter-spacing: .1em; white-space: nowrap; }}
+  .seg {{ display: inline-flex; border: 1px solid var(--line-strong); border-radius: 6px; overflow: hidden; background: var(--card); }}
+  .seg button {{
+    font: inherit; font-size: 13px; color: var(--muted); background: none; border: 0;
+    padding: 5px 12px; cursor: pointer; border-left: 1px solid var(--line); white-space: nowrap;
+  }}
+  .seg button:first-child {{ border-left: 0; }}
+  .seg button[aria-pressed="true"] {{ background: var(--red); color: #FCF6EF; }}
+  .seg button:disabled {{ color: var(--faint); cursor: default; text-decoration: line-through; }}
+
   @media (max-width: 760px) {{
     body {{ padding: 24px 16px 40px; }}
     h1 {{ font-size: 24px; }}
@@ -387,7 +463,11 @@ TEMPLATE = """<!DOCTYPE html>
     .chart {{ min-width: 0; }}
     .dl {{ display: none; }}
     .ds {{ display: inline; }}
-    .row {{ grid-template-columns: minmax(0, 1fr) 24px 26px 26px 98px; }}
+    .row {{ grid-template-columns: minmax(0, 1fr) 98px; }}
+    .num, .date, .head > div:nth-child(2), .head > div:nth-child(3), .head > div:nth-child(4) {{ display: none !important; }}
+    .sorter {{ flex-direction: column; gap: 8px; }}
+    .sort-line {{ justify-content: space-between; }}
+    .seg button {{ padding: 6px 10px; }}
     .row > div {{ padding: 0 3px; }}
     .row > div:first-child {{ padding-left: 10px; }}
     .row > div:nth-child(5) {{ padding-right: 8px; }}
@@ -409,7 +489,8 @@ TEMPLATE = """<!DOCTYPE html>
   }}
   @media (max-width: 400px) {{
     .name {{ font-size: 13px; }}
-    .row {{ grid-template-columns: minmax(0, 1fr) 22px 24px 24px 94px; }}
+    .row {{ grid-template-columns: minmax(0, 1fr) 94px; }}
+    .seg button {{ padding: 6px 8px; }}
     .adj {{ margin-left: 4px; }}
     .stat span {{ font-size: 11px; letter-spacing: 0; }}
   }}
@@ -420,6 +501,7 @@ TEMPLATE = """<!DOCTYPE html>
     .chart {{ border-color: var(--line-strong); }}
     .stat, .chart {{ break-inside: avoid; }}
     .pagefoot a.syncbtn {{ display: none; }}
+    .sorter {{ display: none; }}
   }}
 </style>
 </head>
@@ -434,6 +516,11 @@ TEMPLATE = """<!DOCTYPE html>
     <div class="stat"><b>{n_groups} <small>组</small></b><span>已排入住</span></div>
     <div class="stat"><b>{peak_count} <small>组</small></b><span>峰值夜 · {peak_label}</span></div>
     <div class="stat"><b>{total_people} <small>人</small></b><span>入住总人数</span></div>
+  </div>
+
+  <div class="sorter" id="sorter" hidden>
+    <div class="sort-line"><span class="sort-label">首要排序</span><span class="seg" data-level="primary"><button type="button" data-key="arrive">到达</button><button type="button" data-key="room">房间号</button><button type="button" data-key="group">分组</button></span></div>
+    <div class="sort-line"><span class="sort-label">次要排序</span><span class="seg" data-level="secondary"><button type="button" data-key="">无</button><button type="button" data-key="arrive">到达</button><button type="button" data-key="room">房间号</button><button type="button" data-key="group">分组</button></span></div>
   </div>
 
   <div class="scroll">
@@ -479,6 +566,7 @@ TEMPLATE = """<!DOCTYPE html>
 
   <p class="pagefoot">数据更新于 __UPDATED_AT__（北京时间）· 数据源 Notion，每 30 分钟自动同步<a class="syncbtn" href="https://github.com/Lomolanisgo/lomolanisgo.github.io/actions/workflows/update-wedding.yml" target="_blank" rel="noopener">🔄 立即同步</a></p>
 </div>
+<script>{sort_js}</script>
 </body>
 </html>
 """

@@ -344,11 +344,11 @@ TEMPLATE = """<!DOCTYPE html>
   .stat small {{ font-size: 12px; color: var(--faint); font-weight: 400; }}
 
   .scroll {{ overflow-x: auto; }}
-  .chart {{ min-width: 1036px; background: var(--card); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }}
+  .chart {{ min-width: 1000px; background: var(--card); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }}
 
   .row {{
     display: grid;
-    grid-template-columns: 240px 52px 78px 78px 120px 1fr;
+    grid-template-columns: 240px 44px 64px 64px 120px 1fr;
     align-items: stretch;
   }}
   .row > div {{ padding: 0 10px; display: flex; align-items: center; min-height: 34px; }}
@@ -362,9 +362,10 @@ TEMPLATE = """<!DOCTYPE html>
   .row > div:first-child {{ min-width: 0; }}
   .name {{ min-width: 0; font-weight: 500; line-height: 1.35; padding: 7px 0; overflow-wrap: anywhere; }}
   .roomno {{ flex: none; margin-left: 6px; font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }}
+  .num, .head > div:nth-child(2) {{ padding: 0 4px !important; white-space: nowrap; }}
   .num {{ justify-content: center; font-variant-numeric: tabular-nums; color: var(--ink); }}
   .num.zero {{ color: var(--faint); }}
-  .date {{ font-variant-numeric: tabular-nums; color: var(--muted); font-size: 13px; white-space: nowrap; }}
+  .date {{ font-variant-numeric: tabular-nums; color: var(--muted); font-size: 13px; white-space: nowrap; padding: 0 6px !important; }}
 
   /* 时间轴：每列 = 一晚 */
   .tl {{ position: relative; padding: 0 !important; }}

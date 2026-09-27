@@ -148,6 +148,20 @@
   .ds { display: none; }
 
   /* 窄屏：不横向滚动；每组第一行是文字信息，第二行是整宽时间轴，日期只显示「日」 */
+  /* 排序器 */
+  .sorter { display: flex; flex-wrap: wrap; gap: 8px 24px; margin: 0 0 12px; font-size: 13px; }
+  .sorter[hidden] { display: none; }
+  .sort-line { display: flex; align-items: center; gap: 8px; }
+  .sort-label { font-size: 12px; font-weight: 700; color: var(--gold); letter-spacing: .1em; white-space: nowrap; }
+  .seg { display: inline-flex; border: 1px solid var(--line-strong); border-radius: 6px; overflow: hidden; background: var(--card); }
+  .seg button {
+    font: inherit; font-size: 13px; color: var(--muted); background: none; border: 0;
+    padding: 5px 12px; cursor: pointer; border-left: 1px solid var(--line); white-space: nowrap;
+  }
+  .seg button:first-child { border-left: 0; }
+  .seg button[aria-pressed="true"] { background: var(--red); color: #FCF6EF; }
+  .seg button:disabled { color: var(--faint); cursor: default; text-decoration: line-through; }
+
   @media (max-width: 760px) {
     body { padding: 24px 16px 40px; }
     h1 { font-size: 24px; }
@@ -158,7 +172,11 @@
     .chart { min-width: 0; }
     .dl { display: none; }
     .ds { display: inline; }
-    .row { grid-template-columns: minmax(0, 1fr) 24px 26px 26px 98px; }
+    .row { grid-template-columns: minmax(0, 1fr) 98px; }
+    .num, .date, .head > div:nth-child(2), .head > div:nth-child(3), .head > div:nth-child(4) { display: none !important; }
+    .sorter { flex-direction: column; gap: 8px; }
+    .sort-line { justify-content: space-between; }
+    .seg button { padding: 6px 10px; }
     .row > div { padding: 0 3px; }
     .row > div:first-child { padding-left: 10px; }
     .row > div:nth-child(5) { padding-right: 8px; }
@@ -180,7 +198,8 @@
   }
   @media (max-width: 400px) {
     .name { font-size: 13px; }
-    .row { grid-template-columns: minmax(0, 1fr) 22px 24px 24px 94px; }
+    .row { grid-template-columns: minmax(0, 1fr) 94px; }
+    .seg button { padding: 6px 8px; }
     .adj { margin-left: 4px; }
     .stat span { font-size: 11px; letter-spacing: 0; }
   }
@@ -191,6 +210,7 @@
     .chart { border-color: var(--line-strong); }
     .stat, .chart { break-inside: avoid; }
     .pagefoot a.syncbtn { display: none; }
+    .sorter { display: none; }
   }
 </style>
 </head>
@@ -205,6 +225,11 @@
     <div class="stat"><b>26 <small>组</small></b><span>已排入住</span></div>
     <div class="stat"><b>22 <small>组</small></b><span>峰值夜 · 10/6</span></div>
     <div class="stat"><b>49 <small>人</small></b><span>入住总人数</span></div>
+  </div>
+
+  <div class="sorter" id="sorter" hidden>
+    <div class="sort-line"><span class="sort-label">首要排序</span><span class="seg" data-level="primary"><button type="button" data-key="arrive">到达</button><button type="button" data-key="room">房间号</button><button type="button" data-key="group">分组</button></span></div>
+    <div class="sort-line"><span class="sort-label">次要排序</span><span class="seg" data-level="secondary"><button type="button" data-key="">无</button><button type="button" data-key="arrive">到达</button><button type="button" data-key="room">房间号</button><button type="button" data-key="group">分组</button></span></div>
   </div>
 
   <div class="scroll">
@@ -222,32 +247,32 @@
       </div>
     </div>
 
-    <div class="row body-row"><div><span class="name">侯焯霖 &amp; 李洋</span><i class="adj b">B</i></div><div class="num">2</div><div class="date"><span class="dl">10/3 六</span><span class="ds">3</span></div><div class="date"><span class="dl">10/7 三</span><span class="ds">7</span></div><div class="note"><span class="tag">8203 湖景标间</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:0%;width:100%" title="侯焯霖 &amp; 李洋 · 2人 · 10/3 入住，10/7 退房，4晚"><em>4晚</em></div></div></div>
-    <div class="row body-row"><div><span class="name">王有凤阿姨 &amp; 郭嘉锐（伴）</span></div><div class="num">2</div><div class="date"><span class="dl">10/3 六</span><span class="ds">3</span></div><div class="date"><span class="dl">10/7 三</span><span class="ds">7</span></div><div class="note"><span class="tag">8303 湖景标间</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:0%;width:100%" title="王有凤阿姨 &amp; 郭嘉锐（伴） · 2人 · 10/3 入住，10/7 退房，4晚"><em>4晚</em></div></div></div>
-    <div class="row body-row"><div><span class="name">臧义程 &amp; 陈景怡</span><i class="adj a">A</i></div><div class="num">2</div><div class="date"><span class="dl">10/3 六</span><span class="ds">3</span></div><div class="date"><span class="dl">10/7 三</span><span class="ds">7</span></div><div class="note"><span class="tag">8306 豪华大床</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:0%;width:100%" title="臧义程 &amp; 陈景怡 · 2人 · 10/3 入住，10/7 退房，4晚"><em>4晚</em></div></div></div>
-    <div class="row body-row"><div><span class="name">张博（伴）王永恒 &amp; 杨子丰</span><i class="adj b">B</i></div><div class="num">3</div><div class="date"><span class="dl">10/4 日</span><span class="ds">4</span></div><div class="date"><span class="dl">10/7 三</span><span class="ds">7</span></div><div class="note"><span class="tag">8102 山景标间</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:25%;width:75%" title="张博（伴）王永恒 &amp; 杨子丰 · 3人 · 10/4 入住，10/7 退房，3晚"><em>3晚</em></div></div></div>
-    <div class="row body-row"><div><span class="name">付汉奇（伴）&amp; 米乃蝶</span></div><div class="num">2</div><div class="date"><span class="dl">10/4 日</span><span class="ds">4</span></div><div class="date"><span class="dl">10/7 三</span><span class="ds">7</span></div><div class="note"><span class="tag">8201 湖景大床</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:25%;width:75%" title="付汉奇（伴）&amp; 米乃蝶 · 2人 · 10/4 入住，10/7 退房，3晚"><em>3晚</em></div></div></div>
-    <div class="row body-row"><div><span class="name">奥斯丁 &amp; 陈憬夫</span></div><div class="num">2</div><div class="date"><span class="dl">10/4 日</span><span class="ds">4</span></div><div class="date"><span class="dl">10/7 三</span><span class="ds">7</span></div><div class="note"><span class="tag">8215 湖景标间</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:25%;width:75%" title="奥斯丁 &amp; 陈憬夫 · 2人 · 10/4 入住，10/7 退房，3晚"><em>3晚</em></div></div></div>
-    <div class="row body-row"><div><span class="name">孟永为大大&amp;岳阿姨</span><i class="adj d">D</i></div><div class="num">2</div><div class="date"><span class="dl">10/4 日</span><span class="ds">4</span></div><div class="date"><span class="dl">10/7 三</span><span class="ds">7</span></div><div class="note"><span class="tag">8202 湖景大床</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:25%;width:75%" title="孟永为大大&amp;岳阿姨 · 2人 · 10/4 入住，10/7 退房，3晚"><em>3晚</em></div></div></div>
-    <div class="row body-row"><div><span class="name">孟永清大大 &amp; 李三叔</span><i class="adj d">D</i></div><div class="num">2</div><div class="date"><span class="dl">10/4 日</span><span class="ds">4</span></div><div class="date"><span class="dl">10/7 三</span><span class="ds">7</span></div><div class="note"><span class="tag">8208 山景标间</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:25%;width:75%" title="孟永清大大 &amp; 李三叔 · 2人 · 10/4 入住，10/7 退房，3晚"><em>3晚</em></div></div></div>
-    <div class="row body-row"><div><span class="name">李如阿姨 &amp; 陈文媛阿姨</span></div><div class="num">2</div><div class="date"><span class="dl">10/4 日</span><span class="ds">4</span></div><div class="date"><span class="dl">10/7 三</span><span class="ds">7</span></div><div class="note"><span class="tag">8310 山景标间</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:25%;width:75%" title="李如阿姨 &amp; 陈文媛阿姨 · 2人 · 10/4 入住，10/7 退房，3晚"><em>3晚</em></div></div></div>
-    <div class="row body-row"><div><span class="name">程永明 &amp; 臧晓军</span><i class="adj a">A</i></div><div class="num">2</div><div class="date"><span class="dl">10/4 日</span><span class="ds">4</span></div><div class="date"><span class="dl">10/7 三</span><span class="ds">7</span></div><div class="note"><span class="tag">8305 湖景大床</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:25%;width:75%" title="程永明 &amp; 臧晓军 · 2人 · 10/4 入住，10/7 退房，3晚"><em>3晚</em></div></div></div>
-    <div class="row body-row"><div><span class="name">邢泽宏 &amp; 宋韩琪</span><i class="adj b">B</i></div><div class="num">2</div><div class="date"><span class="dl">10/4 日</span><span class="ds">4</span></div><div class="date"><span class="dl">10/7 三</span><span class="ds">7</span></div><div class="note"><span class="tag">8302 湖景大床</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:25%;width:75%" title="邢泽宏 &amp; 宋韩琪 · 2人 · 10/4 入住，10/7 退房，3晚"><em>3晚</em></div></div></div>
-    <div class="row body-row"><div><span class="name">马丞（伴）&amp;唐帅</span><i class="adj b">B</i></div><div class="num">2</div><div class="date"><span class="dl">10/4 日</span><span class="ds">4</span></div><div class="date"><span class="dl">10/7 三</span><span class="ds">7</span></div><div class="note"><span class="tag">8205 湖景大床</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:25%;width:75%" title="马丞（伴）&amp;唐帅 · 2人 · 10/4 入住，10/7 退房，3晚"><em>3晚</em></div></div></div>
-    <div class="row body-row"><div><span class="name">李东春大大</span><i class="adj d">D</i></div><div class="num">1</div><div class="date"><span class="dl">10/4 日</span><span class="ds">4</span></div><div class="date"><span class="dl">10/7 三</span><span class="ds">7</span></div><div class="note"><span class="tag">8212 山景标间</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:25%;width:75%" title="李东春大大 · 1人 · 10/4 入住，10/7 退房，3晚"><em>3晚</em></div></div></div>
-    <div class="row body-row"><div><span class="name">臧晓红 &amp; 黄福建 &amp; 黄淞琦</span><i class="adj a">A</i></div><div class="num">3</div><div class="date"><span class="dl">10/5 一</span><span class="ds">5</span></div><div class="date"><span class="dl">10/7 三</span><span class="ds">7</span></div><div class="note"><span class="tag">8103 家庭亲子</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:50%;width:50%" title="臧晓红 &amp; 黄福建 &amp; 黄淞琦 · 3人 · 10/5 入住，10/7 退房，2晚"><em>2晚</em></div></div></div>
-    <div class="row body-row"><div><span class="name">麦海锋 &amp; 赵梦昊</span><i class="adj c">C</i></div><div class="num">2</div><div class="date"><span class="dl">10/5 一</span><span class="ds">5</span></div><div class="date"><span class="dl">10/7 三</span><span class="ds">7</span></div><div class="note"><span class="tag">8312 山景标间</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:50%;width:50%" title="麦海锋 &amp; 赵梦昊 · 2人 · 10/5 入住，10/7 退房，2晚"><em>2晚</em></div></div></div>
-    <div class="row body-row"><div><span class="name">周恒（伴）</span><i class="adj a">A</i></div><div class="num">1</div><div class="date"><span class="dl">10/5 一</span><span class="ds">5</span></div><div class="date"><span class="dl">10/7 三</span><span class="ds">7</span></div><div class="note"><span class="tag">8211 山景大床</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:50%;width:50%" title="周恒（伴） · 1人 · 10/5 入住，10/7 退房，2晚"><em>2晚</em></div></div></div>
-    <div class="row body-row"><div><span class="name">摄像老师x2</span></div><div class="num">2</div><div class="date"><span class="dl">10/5 一</span><span class="ds">5</span></div><div class="date"><span class="dl">10/6 二</span><span class="ds">6</span></div><div class="note"><span class="tag">8107 山景标间</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar n1" style="left:50%;width:25%" title="摄像老师x2 · 2人 · 10/5 入住，10/6 退房，1晚"><em>1晚</em></div></div></div>
-    <div class="row body-row"><div><span class="name">摄影老师x2</span></div><div class="num">2</div><div class="date"><span class="dl">10/5 一</span><span class="ds">5</span></div><div class="date"><span class="dl">10/6 二</span><span class="ds">6</span></div><div class="note"><span class="tag">8315 山景标间</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar n1" style="left:50%;width:25%" title="摄影老师x2 · 2人 · 10/5 入住，10/6 退房，1晚"><em>1晚</em></div></div></div>
-    <div class="row body-row"><div><span class="name">跟妆老师x2</span></div><div class="num">2</div><div class="date"><span class="dl">10/5 一</span><span class="ds">5</span></div><div class="date"><span class="dl">10/6 二</span><span class="ds">6</span></div><div class="note"><span class="tag">8308 山景标间</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar n1" style="left:50%;width:25%" title="跟妆老师x2 · 2人 · 10/5 入住，10/6 退房，1晚"><em>1晚</em></div></div></div>
-    <div class="row body-row"><div><span class="name">管家老师</span></div><div class="num">1</div><div class="date"><span class="dl">10/5 一</span><span class="ds">5</span></div><div class="date"><span class="dl">10/6 二</span><span class="ds">6</span></div><div class="note"><span class="tag">8311 山景大床</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar n1" style="left:50%;width:25%" title="管家老师 · 1人 · 10/5 入住，10/6 退房，1晚"><em>1晚</em></div></div></div>
-    <div class="row body-row"><div><span class="name">孟永民叔叔 &amp; 婶</span></div><div class="num">2</div><div class="date"><span class="dl">10/6 二</span><span class="ds">6</span></div><div class="date"><span class="dl">10/7 三</span><span class="ds">7</span></div><div class="note"><span class="tag">8315 山景标间</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar n1" style="left:75%;width:25%" title="孟永民叔叔 &amp; 婶 · 2人 · 10/6 入住，10/7 退房，1晚"><em>1晚</em></div></div></div>
-    <div class="row body-row"><div><span class="name">王晨雨 &amp; 姚亚男</span></div><div class="num">2</div><div class="date"><span class="dl">10/6 二</span><span class="ds">6</span></div><div class="date"><span class="dl">10/7 三</span><span class="ds">7</span></div><div class="note"><span class="tag">8209 山景大床</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar n1" style="left:75%;width:25%" title="王晨雨 &amp; 姚亚男 · 2人 · 10/6 入住，10/7 退房，1晚"><em>1晚</em></div></div></div>
-    <div class="row body-row"><div><span class="name">谢志远 &amp; 女朋友</span><i class="adj c">C</i></div><div class="num">2</div><div class="date"><span class="dl">10/6 二</span><span class="ds">6</span></div><div class="date"><span class="dl">10/7 三</span><span class="ds">7</span></div><div class="note"><span class="tag">8207 侧湖大床</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar n1" style="left:75%;width:25%" title="谢志远 &amp; 女朋友 · 2人 · 10/6 入住，10/7 退房，1晚"><em>1晚</em></div></div></div>
-    <div class="row body-row"><div><span class="name">高晓娟 &amp; 姐夫</span></div><div class="num">2</div><div class="date"><span class="dl">10/6 二</span><span class="ds">6</span></div><div class="date"><span class="dl">10/7 三</span><span class="ds">7</span></div><div class="note"><span class="tag">8206 豪华大床</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar n1" style="left:75%;width:25%" title="高晓娟 &amp; 姐夫 · 2人 · 10/6 入住，10/7 退房，1晚"><em>1晚</em></div></div></div>
-    <div class="row body-row"><div><span class="name">庞竺君</span></div><div class="num">1</div><div class="date"><span class="dl">10/6 二</span><span class="ds">6</span></div><div class="date"><span class="dl">10/7 三</span><span class="ds">7</span></div><div class="note"><span class="tag">8309 山景大床</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar n1" style="left:75%;width:25%" title="庞竺君 · 1人 · 10/6 入住，10/7 退房，1晚"><em>1晚</em></div></div></div>
-    <div class="row body-row"><div><span class="name">肖启翔</span></div><div class="num">1</div><div class="date"><span class="dl">10/6 二</span><span class="ds">6</span></div><div class="date"><span class="dl">10/7 三</span><span class="ds">7</span></div><div class="note"><span class="tag">8210 山景标间</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar n1" style="left:75%;width:25%" title="肖启翔 · 1人 · 10/6 入住，10/7 退房，1晚"><em>1晚</em></div></div></div>
+    <div class="row body-row" data-arrive="2026-10-03" data-room="8203" data-group="B"><div><span class="name">侯焯霖 &amp; 李洋</span><i class="adj b">B</i></div><div class="num">2</div><div class="date"><span class="dl">10/3 六</span><span class="ds">3</span></div><div class="date"><span class="dl">10/7 三</span><span class="ds">7</span></div><div class="note"><span class="tag">8203 湖景标间</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:0%;width:100%" title="侯焯霖 &amp; 李洋 · 2人 · 10/3 入住，10/7 退房，4晚"><em>4晚</em></div></div></div>
+    <div class="row body-row" data-arrive="2026-10-03" data-room="8303" data-group=""><div><span class="name">王有凤阿姨 &amp; 郭嘉锐*</span></div><div class="num">2</div><div class="date"><span class="dl">10/3 六</span><span class="ds">3</span></div><div class="date"><span class="dl">10/7 三</span><span class="ds">7</span></div><div class="note"><span class="tag">8303 湖景标间</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:0%;width:100%" title="王有凤阿姨 &amp; 郭嘉锐* · 2人 · 10/3 入住，10/7 退房，4晚"><em>4晚</em></div></div></div>
+    <div class="row body-row" data-arrive="2026-10-03" data-room="8306" data-group="A"><div><span class="name">臧义程 &amp; 陈景怡</span><i class="adj a">A</i></div><div class="num">2</div><div class="date"><span class="dl">10/3 六</span><span class="ds">3</span></div><div class="date"><span class="dl">10/7 三</span><span class="ds">7</span></div><div class="note"><span class="tag">8306 豪华大床</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:0%;width:100%" title="臧义程 &amp; 陈景怡 · 2人 · 10/3 入住，10/7 退房，4晚"><em>4晚</em></div></div></div>
+    <div class="row body-row" data-arrive="2026-10-04" data-room="8102" data-group="B"><div><span class="name">张博* &amp; 王永恒 &amp; 杨子丰</span><i class="adj b">B</i></div><div class="num">3</div><div class="date"><span class="dl">10/4 日</span><span class="ds">4</span></div><div class="date"><span class="dl">10/7 三</span><span class="ds">7</span></div><div class="note"><span class="tag">8102 山景标间</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:25%;width:75%" title="张博* &amp; 王永恒 &amp; 杨子丰 · 3人 · 10/4 入住，10/7 退房，3晚"><em>3晚</em></div></div></div>
+    <div class="row body-row" data-arrive="2026-10-04" data-room="8201" data-group=""><div><span class="name">付汉奇* &amp; 米乃蝶</span></div><div class="num">2</div><div class="date"><span class="dl">10/4 日</span><span class="ds">4</span></div><div class="date"><span class="dl">10/7 三</span><span class="ds">7</span></div><div class="note"><span class="tag">8201 湖景大床</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:25%;width:75%" title="付汉奇* &amp; 米乃蝶 · 2人 · 10/4 入住，10/7 退房，3晚"><em>3晚</em></div></div></div>
+    <div class="row body-row" data-arrive="2026-10-04" data-room="8215" data-group=""><div><span class="name">奥斯丁 &amp; 陈憬夫</span></div><div class="num">2</div><div class="date"><span class="dl">10/4 日</span><span class="ds">4</span></div><div class="date"><span class="dl">10/7 三</span><span class="ds">7</span></div><div class="note"><span class="tag">8215 湖景标间</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:25%;width:75%" title="奥斯丁 &amp; 陈憬夫 · 2人 · 10/4 入住，10/7 退房，3晚"><em>3晚</em></div></div></div>
+    <div class="row body-row" data-arrive="2026-10-04" data-room="8202" data-group="D"><div><span class="name">孟永为大大 &amp; 岳阿姨</span><i class="adj d">D</i></div><div class="num">2</div><div class="date"><span class="dl">10/4 日</span><span class="ds">4</span></div><div class="date"><span class="dl">10/7 三</span><span class="ds">7</span></div><div class="note"><span class="tag">8202 湖景大床</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:25%;width:75%" title="孟永为大大 &amp; 岳阿姨 · 2人 · 10/4 入住，10/7 退房，3晚"><em>3晚</em></div></div></div>
+    <div class="row body-row" data-arrive="2026-10-04" data-room="8208" data-group="D"><div><span class="name">孟永清大大 &amp; 李三叔</span><i class="adj d">D</i></div><div class="num">2</div><div class="date"><span class="dl">10/4 日</span><span class="ds">4</span></div><div class="date"><span class="dl">10/7 三</span><span class="ds">7</span></div><div class="note"><span class="tag">8208 山景标间</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:25%;width:75%" title="孟永清大大 &amp; 李三叔 · 2人 · 10/4 入住，10/7 退房，3晚"><em>3晚</em></div></div></div>
+    <div class="row body-row" data-arrive="2026-10-04" data-room="8310" data-group=""><div><span class="name">李如阿姨 &amp; 陈文媛阿姨</span></div><div class="num">2</div><div class="date"><span class="dl">10/4 日</span><span class="ds">4</span></div><div class="date"><span class="dl">10/7 三</span><span class="ds">7</span></div><div class="note"><span class="tag">8310 山景标间</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:25%;width:75%" title="李如阿姨 &amp; 陈文媛阿姨 · 2人 · 10/4 入住，10/7 退房，3晚"><em>3晚</em></div></div></div>
+    <div class="row body-row" data-arrive="2026-10-04" data-room="8305" data-group="A"><div><span class="name">程永明 &amp; 臧晓军</span><i class="adj a">A</i></div><div class="num">2</div><div class="date"><span class="dl">10/4 日</span><span class="ds">4</span></div><div class="date"><span class="dl">10/7 三</span><span class="ds">7</span></div><div class="note"><span class="tag">8305 湖景大床</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:25%;width:75%" title="程永明 &amp; 臧晓军 · 2人 · 10/4 入住，10/7 退房，3晚"><em>3晚</em></div></div></div>
+    <div class="row body-row" data-arrive="2026-10-04" data-room="8302" data-group="B"><div><span class="name">邢泽宏 &amp; 宋韩琪</span><i class="adj b">B</i></div><div class="num">2</div><div class="date"><span class="dl">10/4 日</span><span class="ds">4</span></div><div class="date"><span class="dl">10/7 三</span><span class="ds">7</span></div><div class="note"><span class="tag">8302 湖景大床</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:25%;width:75%" title="邢泽宏 &amp; 宋韩琪 · 2人 · 10/4 入住，10/7 退房，3晚"><em>3晚</em></div></div></div>
+    <div class="row body-row" data-arrive="2026-10-04" data-room="8205" data-group="B"><div><span class="name">马丞* &amp; 唐帅</span><i class="adj b">B</i></div><div class="num">2</div><div class="date"><span class="dl">10/4 日</span><span class="ds">4</span></div><div class="date"><span class="dl">10/7 三</span><span class="ds">7</span></div><div class="note"><span class="tag">8205 湖景大床</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:25%;width:75%" title="马丞* &amp; 唐帅 · 2人 · 10/4 入住，10/7 退房，3晚"><em>3晚</em></div></div></div>
+    <div class="row body-row" data-arrive="2026-10-04" data-room="8212" data-group="D"><div><span class="name">李东春大大</span><i class="adj d">D</i></div><div class="num">1</div><div class="date"><span class="dl">10/4 日</span><span class="ds">4</span></div><div class="date"><span class="dl">10/7 三</span><span class="ds">7</span></div><div class="note"><span class="tag">8212 山景标间</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:25%;width:75%" title="李东春大大 · 1人 · 10/4 入住，10/7 退房，3晚"><em>3晚</em></div></div></div>
+    <div class="row body-row" data-arrive="2026-10-05" data-room="8103" data-group="A"><div><span class="name">臧晓红 &amp; 黄福建 &amp; 黄淞琦</span><i class="adj a">A</i></div><div class="num">3</div><div class="date"><span class="dl">10/5 一</span><span class="ds">5</span></div><div class="date"><span class="dl">10/7 三</span><span class="ds">7</span></div><div class="note"><span class="tag">8103 家庭亲子</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:50%;width:50%" title="臧晓红 &amp; 黄福建 &amp; 黄淞琦 · 3人 · 10/5 入住，10/7 退房，2晚"><em>2晚</em></div></div></div>
+    <div class="row body-row" data-arrive="2026-10-05" data-room="8312" data-group="C"><div><span class="name">麦海锋 &amp; 赵梦昊</span><i class="adj c">C</i></div><div class="num">2</div><div class="date"><span class="dl">10/5 一</span><span class="ds">5</span></div><div class="date"><span class="dl">10/7 三</span><span class="ds">7</span></div><div class="note"><span class="tag">8312 山景标间</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:50%;width:50%" title="麦海锋 &amp; 赵梦昊 · 2人 · 10/5 入住，10/7 退房，2晚"><em>2晚</em></div></div></div>
+    <div class="row body-row" data-arrive="2026-10-05" data-room="8211" data-group="A"><div><span class="name">周恒*</span><i class="adj a">A</i></div><div class="num">1</div><div class="date"><span class="dl">10/5 一</span><span class="ds">5</span></div><div class="date"><span class="dl">10/7 三</span><span class="ds">7</span></div><div class="note"><span class="tag">8211 山景大床</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar" style="left:50%;width:50%" title="周恒* · 1人 · 10/5 入住，10/7 退房，2晚"><em>2晚</em></div></div></div>
+    <div class="row body-row" data-arrive="2026-10-05" data-room="8107" data-group=""><div><span class="name">摄像老师x2</span></div><div class="num">2</div><div class="date"><span class="dl">10/5 一</span><span class="ds">5</span></div><div class="date"><span class="dl">10/6 二</span><span class="ds">6</span></div><div class="note"><span class="tag">8107 山景标间</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar n1" style="left:50%;width:25%" title="摄像老师x2 · 2人 · 10/5 入住，10/6 退房，1晚"><em>1晚</em></div></div></div>
+    <div class="row body-row" data-arrive="2026-10-05" data-room="8315" data-group=""><div><span class="name">摄影老师x2</span></div><div class="num">2</div><div class="date"><span class="dl">10/5 一</span><span class="ds">5</span></div><div class="date"><span class="dl">10/6 二</span><span class="ds">6</span></div><div class="note"><span class="tag">8315 山景标间</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar n1" style="left:50%;width:25%" title="摄影老师x2 · 2人 · 10/5 入住，10/6 退房，1晚"><em>1晚</em></div></div></div>
+    <div class="row body-row" data-arrive="2026-10-05" data-room="8308" data-group=""><div><span class="name">跟妆老师x2</span></div><div class="num">2</div><div class="date"><span class="dl">10/5 一</span><span class="ds">5</span></div><div class="date"><span class="dl">10/6 二</span><span class="ds">6</span></div><div class="note"><span class="tag">8308 山景标间</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar n1" style="left:50%;width:25%" title="跟妆老师x2 · 2人 · 10/5 入住，10/6 退房，1晚"><em>1晚</em></div></div></div>
+    <div class="row body-row" data-arrive="2026-10-05" data-room="8311" data-group=""><div><span class="name">管家老师</span></div><div class="num">1</div><div class="date"><span class="dl">10/5 一</span><span class="ds">5</span></div><div class="date"><span class="dl">10/6 二</span><span class="ds">6</span></div><div class="note"><span class="tag">8311 山景大床</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar n1" style="left:50%;width:25%" title="管家老师 · 1人 · 10/5 入住，10/6 退房，1晚"><em>1晚</em></div></div></div>
+    <div class="row body-row" data-arrive="2026-10-06" data-room="8315" data-group=""><div><span class="name">孟永民叔叔 &amp; 婶</span></div><div class="num">2</div><div class="date"><span class="dl">10/6 二</span><span class="ds">6</span></div><div class="date"><span class="dl">10/7 三</span><span class="ds">7</span></div><div class="note"><span class="tag">8315 山景标间</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar n1" style="left:75%;width:25%" title="孟永民叔叔 &amp; 婶 · 2人 · 10/6 入住，10/7 退房，1晚"><em>1晚</em></div></div></div>
+    <div class="row body-row" data-arrive="2026-10-06" data-room="8209" data-group=""><div><span class="name">王晨雨 &amp; 姚亚男</span></div><div class="num">2</div><div class="date"><span class="dl">10/6 二</span><span class="ds">6</span></div><div class="date"><span class="dl">10/7 三</span><span class="ds">7</span></div><div class="note"><span class="tag">8209 山景大床</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar n1" style="left:75%;width:25%" title="王晨雨 &amp; 姚亚男 · 2人 · 10/6 入住，10/7 退房，1晚"><em>1晚</em></div></div></div>
+    <div class="row body-row" data-arrive="2026-10-06" data-room="8207" data-group="C"><div><span class="name">谢志远 &amp; 女朋友</span><i class="adj c">C</i></div><div class="num">2</div><div class="date"><span class="dl">10/6 二</span><span class="ds">6</span></div><div class="date"><span class="dl">10/7 三</span><span class="ds">7</span></div><div class="note"><span class="tag">8207 侧湖大床</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar n1" style="left:75%;width:25%" title="谢志远 &amp; 女朋友 · 2人 · 10/6 入住，10/7 退房，1晚"><em>1晚</em></div></div></div>
+    <div class="row body-row" data-arrive="2026-10-06" data-room="8206" data-group=""><div><span class="name">高晓娟 &amp; 姐夫</span></div><div class="num">2</div><div class="date"><span class="dl">10/6 二</span><span class="ds">6</span></div><div class="date"><span class="dl">10/7 三</span><span class="ds">7</span></div><div class="note"><span class="tag">8206 豪华大床</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar n1" style="left:75%;width:25%" title="高晓娟 &amp; 姐夫 · 2人 · 10/6 入住，10/7 退房，1晚"><em>1晚</em></div></div></div>
+    <div class="row body-row" data-arrive="2026-10-06" data-room="8309" data-group=""><div><span class="name">庞竺君</span></div><div class="num">1</div><div class="date"><span class="dl">10/6 二</span><span class="ds">6</span></div><div class="date"><span class="dl">10/7 三</span><span class="ds">7</span></div><div class="note"><span class="tag">8309 山景大床</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar n1" style="left:75%;width:25%" title="庞竺君 · 1人 · 10/6 入住，10/7 退房，1晚"><em>1晚</em></div></div></div>
+    <div class="row body-row" data-arrive="2026-10-06" data-room="8210" data-group=""><div><span class="name">肖启翔</span></div><div class="num">1</div><div class="date"><span class="dl">10/6 二</span><span class="ds">6</span></div><div class="date"><span class="dl">10/7 三</span><span class="ds">7</span></div><div class="note"><span class="tag">8210 山景标间</span></div><div class="tl"><div class="tl-grid"><i></i><i></i><i></i><i class="last"></i></div><div class="bar n1" style="left:75%;width:25%" title="肖启翔 · 1人 · 10/6 入住，10/7 退房，1晚"><em>1晚</em></div></div></div>
 
     <div class="row totals">
       <div class="label">每晚在住组数</div>
@@ -266,7 +291,7 @@
   <dl class="legend">
     <dt>人数</dt>
     <dd>宾客 <b>42</b> 人（不含摄影、摄像、跟妆、管家等工作人员 7 人）<br>
-      新人 <b>2</b> 人；伴郎 <b>5</b> 人<br>
+      新人 <b>2</b> 人；伴郎 <b>5</b> 人（姓名带 *）<br>
       臧义程 / 程永明 / 臧晓军 负责 <b>29</b> 人；陈景怡 负责 <b>6</b> 人</dd>
     <dt>读法</dt>
     <dd>时间轴每列代表一晚住宿：红条盖到哪列，就住哪晚（如 10/5 抵达、10/6 返回＝只住「10/5 晚」一列）。「入住」为每组入住人数。</dd>
@@ -275,16 +300,68 @@
     <dt>相邻房</dt>
     <dd>
       姓名后同字母圆点＝房间尽量相邻：<br>
-      <span class="adj-item"><i class="adj a">A</i>臧义程 &amp; 陈景怡 / 程永明 &amp; 臧晓军 / 臧晓红 &amp; 黄福建 &amp; 黄淞琦 / 周恒（伴）</span><br>
-      <span class="adj-item"><i class="adj b">B</i>侯焯霖 &amp; 李洋 / 张博（伴）王永恒 &amp; 杨子丰 / 邢泽宏 &amp; 宋韩琪 / 马丞（伴）&amp;唐帅</span><br>
+      <span class="adj-item"><i class="adj a">A</i>臧义程 &amp; 陈景怡 / 程永明 &amp; 臧晓军 / 臧晓红 &amp; 黄福建 &amp; 黄淞琦 / 周恒*</span><br>
+      <span class="adj-item"><i class="adj b">B</i>侯焯霖 &amp; 李洋 / 张博* &amp; 王永恒 &amp; 杨子丰 / 邢泽宏 &amp; 宋韩琪 / 马丞* &amp; 唐帅</span><br>
       <span class="adj-item"><i class="adj c">C</i>麦海锋 &amp; 赵梦昊 / 谢志远 &amp; 女朋友</span><br>
-      <span class="adj-item"><i class="adj d">D</i>孟永为大大&amp;岳阿姨 / 孟永清大大 &amp; 李三叔 / 李东春大大</span>
+      <span class="adj-item"><i class="adj d">D</i>孟永为大大 &amp; 岳阿姨 / 孟永清大大 &amp; 李三叔 / 李东春大大</span>
     </dd>
     <dt>日期待定</dt>
     <dd><b>王泽轩</b>，确认后补入（不计入人数）。</dd>
   </dl>
 
-  <p class="pagefoot">数据更新于 2026-09-26 18:40（北京时间）· 数据源 Notion，每 30 分钟自动同步<a class="syncbtn" href="https://github.com/Lomolanisgo/lomolanisgo.github.io/actions/workflows/update-wedding.yml" target="_blank" rel="noopener">🔄 立即同步</a></p>
+  <p class="pagefoot">数据更新于 2026-09-27 09:24（北京时间）· 数据源 Notion，每 30 分钟自动同步<a class="syncbtn" href="https://github.com/Lomolanisgo/lomolanisgo.github.io/actions/workflows/update-wedding.yml" target="_blank" rel="noopener">🔄 立即同步</a></p>
 </div>
+<script>
+(function () {
+  function cmpBy(key, a, b) {
+    var x = a[key], y = b[key];
+    if (x === y) return 0;
+    if (x === "") return 1;
+    if (y === "") return -1;
+    if (key === "room") return Number(x) - Number(y);
+    return x < y ? -1 : 1;
+  }
+  function order(items, primary, secondary) {
+    return items.slice().sort(function (a, b) {
+      return cmpBy(primary, a, b) || (secondary ? cmpBy(secondary, a, b) : 0) || a.idx - b.idx;
+    });
+  }
+  if (typeof module !== "undefined") module.exports = { order: order };
+  if (typeof document === "undefined") return;
+
+  var sorter = document.getElementById("sorter");
+  var chart = document.querySelector(".chart");
+  var totals = chart.querySelector(".totals");
+  var rows = Array.prototype.map.call(chart.querySelectorAll(".body-row"), function (el, i) {
+    return { el: el, idx: i, arrive: el.dataset.arrive, room: el.dataset.room, group: el.dataset.group };
+  });
+  var state = { primary: "arrive", secondary: "" };
+  try {
+    var saved = JSON.parse(localStorage.getItem("wedding-sort") || "null");
+    if (saved && saved.primary) state = saved;
+  } catch (e) {}
+
+  function render() {
+    if (state.secondary === state.primary) state.secondary = "";
+    order(rows, state.primary, state.secondary).forEach(function (r) { chart.insertBefore(r.el, totals); });
+    Array.prototype.forEach.call(sorter.querySelectorAll(".seg"), function (seg) {
+      var level = seg.dataset.level;
+      Array.prototype.forEach.call(seg.querySelectorAll("button"), function (b) {
+        b.setAttribute("aria-pressed", String(b.dataset.key === state[level]));
+        b.disabled = level === "secondary" && b.dataset.key !== "" && b.dataset.key === state.primary;
+      });
+    });
+    try { localStorage.setItem("wedding-sort", JSON.stringify(state)); } catch (e) {}
+  }
+  sorter.addEventListener("click", function (ev) {
+    var b = ev.target.closest("button");
+    if (!b || b.disabled) return;
+    state[b.closest(".seg").dataset.level] = b.dataset.key;
+    render();
+  });
+  sorter.hidden = false;
+  render();
+})();
+</script>
 </body>
 </html>

@@ -1,0 +1,20 @@
+{
+  "snapshot_recorded_utc": "2026-11-19T13:23:58.785262+00:00",
+  "files": {
+    "nikl_2003.txt": {
+      "url": "https://www.korean.go.kr/common/download.do?c_file_name=b73a8438-4713-4436-8481-ec26fd0dce2a_0.txt&file_path=etcData&o_file_name=vocabulary.txt",
+      "sha256": "3b49681f05d6a7490c13da2a2847e433effdf65da409fd295792d6ee33685064",
+      "bytes": 132254
+    },
+    "foldalpha_zh.csv": {
+      "url": "https://topikvocab.foldalpha.com/download/topik-vocab-zh.csv",
+      "sha256": "93f64c82683767fe0f507a6537d250fc62acdb536258fa2bf21de41c6ff6a08e",
+      "bytes": 826415
+    },
+    "foldalpha_en.csv": {
+      "url": "https://topikvocab.foldalpha.com/download/topik-vocab-en.csv",
+      "sha256": "73c40cb87ba2368345e75d53c1a54b58e73e83123bb19272075588c7180f7626",
+      "bytes": 883485
+    }
+  }
+}

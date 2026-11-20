@@ -12,3 +12,10 @@ exclude:
   - Gemfile
   - Gemfile.lock
   - README.md
+  - korean-app
+  - data
+  - tests
+  - main.py
+  - requirements.txt
+  - provenance.json
+  - validation_report.json

@@ -1,0 +1,271 @@
+{
+  "zh": {
+    "rows": 5965,
+    "missing": [],
+    "extra": [],
+    "duplicate_keys": 0,
+    "matched": 5965
+  },
+  "en": {
+    "rows": 5965,
+    "missing": [],
+    "extra": [],
+    "duplicate_keys": 0,
+    "matched": 5965
+  },
+  "hanja_disagreements": [
+    {
+      "ID": "NIKL2003-154bea35dce96c64",
+      "language": "zh",
+      "official": "間",
+      "third_party": ""
+    },
+    {
+      "ID": "NIKL2003-154bea35dce96c64",
+      "language": "en",
+      "official": "間",
+      "third_party": ""
+    },
+    {
+      "ID": "NIKL2003-ceb5ffc9b2b1632c",
+      "language": "zh",
+      "official": "內外",
+      "third_party": ""
+    },
+    {
+      "ID": "NIKL2003-ceb5ffc9b2b1632c",
+      "language": "en",
+      "official": "內外",
+      "third_party": ""
+    },
+    {
+      "ID": "NIKL2003-5aa1d3be6e2242b5",
+      "language": "zh",
+      "official": "內外",
+      "third_party": ""
+    },
+    {
+      "ID": "NIKL2003-5aa1d3be6e2242b5",
+      "language": "en",
+      "official": "內外",
+      "third_party": ""
+    },
+    {
+      "ID": "NIKL2003-8a837fddf6f12e98",
+      "language": "zh",
+      "official": "對",
+      "third_party": ""
+    },
+    {
+      "ID": "NIKL2003-8a837fddf6f12e98",
+      "language": "en",
+      "official": "對",
+      "third_party": ""
+    },
+    {
+      "ID": "NIKL2003-99b735ac56c29afb",
+      "language": "zh",
+      "official": "道",
+      "third_party": ""
+    },
+    {
+      "ID": "NIKL2003-99b735ac56c29afb",
+      "language": "en",
+      "official": "道",
+      "third_party": ""
+    },
+    {
+      "ID": "NIKL2003-948aac50d041cd48",
+      "language": "zh",
+      "official": "道",
+      "third_party": ""
+    },
+    {
+      "ID": "NIKL2003-948aac50d041cd48",
+      "language": "en",
+      "official": "道",
+      "third_party": ""
+    },
+    {
+      "ID": "NIKL2003-864d4a09f794fa04",
+      "language": "zh",
+      "official": "滿",
+      "third_party": ""
+    },
+    {
+      "ID": "NIKL2003-864d4a09f794fa04",
+      "language": "en",
+      "official": "滿",
+      "third_party": ""
+    },
+    {
+      "ID": "NIKL2003-d7d377d1eb422324",
+      "language": "zh",
+      "official": "面",
+      "third_party": ""
+    },
+    {
+      "ID": "NIKL2003-d7d377d1eb422324",
+      "language": "en",
+      "official": "面",
+      "third_party": ""
+    },
+    {
+      "ID": "NIKL2003-fa3dfc52b004e9c4",
+      "language": "zh",
+      "official": "面",
+      "third_party": ""
+    },
+    {
+      "ID": "NIKL2003-fa3dfc52b004e9c4",
+      "language": "en",
+      "official": "面",
+      "third_party": ""
+    },
+    {
+      "ID": "NIKL2003-718fea71d4ab6ab7",
+      "language": "zh",
+      "official": "名",
+      "third_party": ""
+    },
+    {
+      "ID": "NIKL2003-718fea71d4ab6ab7",
+      "language": "en",
+      "official": "名",
+      "third_party": ""
+    },
+    {
+      "ID": "NIKL2003-ed1d61d76863a776",
+      "language": "zh",
+      "official": "數",
+      "third_party": ""
+    },
+    {
+      "ID": "NIKL2003-ed1d61d76863a776",
+      "language": "en",
+      "official": "數",
+      "third_party": ""
+    },
+    {
+      "ID": "NIKL2003-1ba321521ee6e35c",
+      "language": "zh",
+      "official": "圓",
+      "third_party": ""
+    },
+    {
+      "ID": "NIKL2003-1ba321521ee6e35c",
+      "language": "en",
+      "official": "圓",
+      "third_party": ""
+    },
+    {
+      "ID": "NIKL2003-c90fe33e7f31ea6b",
+      "language": "zh",
+      "official": "日食",
+      "third_party": ""
+    },
+    {
+      "ID": "NIKL2003-c90fe33e7f31ea6b",
+      "language": "en",
+      "official": "日食",
+      "third_party": ""
+    },
+    {
+      "ID": "NIKL2003-3b93290f0f9e4512",
+      "language": "zh",
+      "official": "字",
+      "third_party": ""
+    },
+    {
+      "ID": "NIKL2003-3b93290f0f9e4512",
+      "language": "en",
+      "official": "字",
+      "third_party": ""
+    },
+    {
+      "ID": "NIKL2003-1798be3004fc4f6d",
+      "language": "zh",
+      "official": "張",
+      "third_party": ""
+    },
+    {
+      "ID": "NIKL2003-1798be3004fc4f6d",
+      "language": "en",
+      "official": "張",
+      "third_party": ""
+    },
+    {
+      "ID": "NIKL2003-15ae85de66333fd3",
+      "language": "zh",
+      "official": "獎學金",
+      "third_party": "奬學金"
+    },
+    {
+      "ID": "NIKL2003-15ae85de66333fd3",
+      "language": "en",
+      "official": "獎學金",
+      "third_party": "奬學金"
+    },
+    {
+      "ID": "NIKL2003-246e5bec08e00153",
+      "language": "zh",
+      "official": "全",
+      "third_party": ""
+    },
+    {
+      "ID": "NIKL2003-246e5bec08e00153",
+      "language": "en",
+      "official": "全",
+      "third_party": ""
+    },
+    {
+      "ID": "NIKL2003-ba472ce7cce6d2a9",
+      "language": "zh",
+      "official": "種種",
+      "third_party": ""
+    },
+    {
+      "ID": "NIKL2003-ba472ce7cce6d2a9",
+      "language": "en",
+      "official": "種種",
+      "third_party": ""
+    },
+    {
+      "ID": "NIKL2003-b1f341adbb85b8fa",
+      "language": "zh",
+      "official": "主",
+      "third_party": ""
+    },
+    {
+      "ID": "NIKL2003-b1f341adbb85b8fa",
+      "language": "en",
+      "official": "主",
+      "third_party": ""
+    },
+    {
+      "ID": "NIKL2003-e19d42c3056bc631",
+      "language": "zh",
+      "official": "中食",
+      "third_party": ""
+    },
+    {
+      "ID": "NIKL2003-e19d42c3056bc631",
+      "language": "en",
+      "official": "中食",
+      "third_party": ""
+    },
+    {
+      "ID": "NIKL2003-30f037ca536e5c60",
+      "language": "zh",
+      "official": "沈黙",
+      "third_party": "沈默"
+    },
+    {
+      "ID": "NIKL2003-30f037ca536e5c60",
+      "language": "en",
+      "official": "沈黙",
+      "third_party": "沈默"
+    }
+  ],
+  "translation_validation": "Identity and coverage verified, NOT translation accuracy; official Hanja takes precedence."
+}

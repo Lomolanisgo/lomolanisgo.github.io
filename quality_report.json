@@ -1,0 +1,63 @@
+{
+  "total": 5965,
+  "levels": {
+    "初级（A／1阶段）": 982,
+    "中级（B／2阶段）": 2111,
+    "高级（C／3阶段）": 2872
+  },
+  "pos": {
+    "名词": 3404,
+    "动词": 1345,
+    "副词": 393,
+    "形容词": 376,
+    "辅助谓词": 33,
+    "依存名词": 130,
+    "冠形词": 69,
+    "专有名词": 63,
+    "不可分析": 14,
+    "代词": 47,
+    "数词": 47,
+    "感叹词": 44
+  },
+  "word_types": {
+    "汉字词": {
+      "count": 2464,
+      "percent": 41.3076
+    },
+    "固有词": {
+      "count": 0,
+      "percent": 0.0
+    },
+    "外来词": {
+      "count": 245,
+      "percent": 4.1073
+    },
+    "混合词": {
+      "count": 843,
+      "percent": 14.1324
+    },
+    "未确认": {
+      "count": 2413,
+      "percent": 40.4526
+    }
+  },
+  "word_type_note": "固有词 0 表示尚未确认，不表示词表没有固有词。分类依据原语标注规则，不是官方独立词源标签。",
+  "has_hanja": 3307,
+  "duplicate_ids": 0,
+  "duplicate_full_rows": 0,
+  "repeated_headword_excess_rows": 422,
+  "missing_fields": {
+    "ID": 0,
+    "Korean": 0,
+    "Hanja": 2658,
+    "Chinese": 0,
+    "English": 0,
+    "POS": 0,
+    "Level": 0,
+    "Word_Type": 2413,
+    "Pronunciation": 5965,
+    "Example": 0,
+    "Example_CN": 0,
+    "Source": 0
+  }
+}

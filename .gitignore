@@ -1,0 +1,8 @@
+.venv/
+__pycache__/
+*.pyc
+korean-app/node_modules/
+korean-app/public/data/
+korean-app/test-results/
+korean-app/playwright-report/
+.DS_Store

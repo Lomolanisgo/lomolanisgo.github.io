@@ -1,32 +1,71 @@
 ---
 layout: default
-title: Home
+title: 首页
+lang: zh-CN
 lang_pair: false
+description: "义程的杂货铺：韩语学习、个人项目，以及生活里的小记录。"
+home: true
 ---
 
-<section class="hero-section text-center">
-  <h1 class="hero-title">Yicheng's Grocery</h1>
-  <p class="hero-subtitle text-secondary">杂货铺</p>
-</section>
+<div class="home-page">
+  <section class="home-intro" aria-labelledby="home-title">
+    <p class="home-kicker" lang="en">YICHENG'S GROCERY</p>
+    <h1 id="home-title">义程的杂货铺<span>学习、折腾，<br>也记录生活。</span></h1>
+    <div class="home-welcome">
+      <p>嗨，我是义程。这里放着我做的小工具、感兴趣的项目，<br class="home-desktop-break">还有一些值得留下的日常。欢迎随便逛逛。</p>
+      <p lang="en">Hallo! A little space for things I build, things I learn,<br class="home-desktop-break"> and bits of everyday life.</p>
+    </div>
+  </section>
 
-<div class="content-prose">
-  <div class="about-text mb-5">
-    <p>Hallo! Welcome to my personal website. I'll update here with something I want.</p>
-    <p class="text-secondary"><small>嗨！欢迎来到我的个人网站，我会在这里更新一些杂七杂八的东西。</small></p>
-    <p>Due to the limitation of my English, expression in English may be inaccurate. Thus, all contents that have Chinese version in this website are subject to the Chinese version.</p>
-    <p class="text-secondary"><small>由于我不是英语母语者，英文表述难免会不准确，所以一切有中文内容对应的文章请以中文为准，特别标注的除外。</small></p>
-  </div>
+  <section class="home-feature" aria-labelledby="korean-title">
+    <div class="home-feature-copy">
+      <p class="home-kicker">学习工具 · LANGUAGE LEARNING</p>
+      <h2 id="korean-title">从一个词开始，<br>慢慢读懂韩语。</h2>
+      <p>为汉语母语者整理的韩语词汇学习空间。对照汉字理解词义，用收藏、单词卡片和学习记录，一点点积累。</p>
+      <a class="home-primary" href="{{ '/korean/' | relative_url }}">进入韩语学习</a>
+      <p class="home-feature-note">基于国立国语院分级词表 · 官方分级不等同于 TOPIK 等级</p>
+    </div>
+    <div class="home-word-preview" aria-label="词汇示例：学校">
+      <div class="home-preview-top"><span>词汇一瞥</span><span lang="ko">한국어</span></div>
+      <p class="home-preview-korean" lang="ko">학교</p>
+      <p class="home-preview-hanja">學校</p>
+      <p class="home-preview-meaning">学校 <span lang="en">/ school</span></p>
+      <div class="home-preview-bottom"><span>名词</span><span>初级 · A</span></div>
+      <p class="home-preview-caption">用熟悉的汉字，认识新的词语。</p>
+    </div>
+  </section>
 
-  <h4 class="mb-3">Find me elsewhere</h4>
-  <div class="social-links d-flex flex-wrap gap-2">
-    <a href="https://www.zhihu.com/people/zang-yi-cheng-29" class="btn btn-outline-primary btn-sm">
-      <i class="bi bi-chat-square-text"></i> 知乎
-    </a>
-    <a href="https://space.bilibili.com/19967911" class="btn btn-outline-primary btn-sm">
-      <i class="bi bi-play-btn"></i> Bilibili
-    </a>
-    <a href="https://www.linkedin.com/in/yicheng-zang-70959721b" class="btn btn-outline-primary btn-sm">
-      <i class="bi bi-linkedin"></i> LinkedIn
-    </a>
-  </div>
+  <section class="home-explore" aria-labelledby="explore-title">
+    <div class="home-section-heading"><h2 id="explore-title">再逛逛别的</h2><span lang="en">A few more things</span></div>
+    <div class="home-grid">
+      <a class="home-card" href="{{ '/cv-cn/' | relative_url }}">
+        <span class="home-card-category">关于我 · ABOUT</span>
+        <h3>个人简历</h3>
+        <p>教育经历、研究项目，以及一路积累的技能。</p>
+        <span class="home-card-action">了解我的经历</span>
+      </a>
+      <a class="home-card" href="{{ '/pendant-drop/' | relative_url }}">
+        <span class="home-card-category">项目 · PROJECTS</span>
+        <h3>悬滴图像生成器</h3>
+        <p>关于悬滴图像生成原理的项目页面，内容还在整理中。</p>
+        <span class="home-card-action">查看项目页面 <span class="home-building">建设中</span></span>
+      </a>
+      <a class="home-card" href="{{ '/care-guide-bart-cn/' | relative_url }}">
+        <span class="home-card-category">生活 · EVERYDAY</span>
+        <h3>叨叨的照顾指南</h3>
+        <p>吃饭、散步、睡觉。关于照顾叨叨的一些小事。</p>
+        <span class="home-card-action">认识叨叨</span>
+      </a>
+    </div>
+  </section>
+
+  <section class="home-elsewhere" aria-labelledby="elsewhere-title">
+    <div><h2 id="elsewhere-title">在别处找到我</h2><p lang="en">Find me elsewhere.</p></div>
+    <div class="home-socials">
+      <a href="https://www.zhihu.com/people/zang-yi-cheng-29">知乎</a>
+      <a href="https://space.bilibili.com/19967911">Bilibili</a>
+      <a href="https://www.linkedin.com/in/yicheng-zang-70959721b">LinkedIn</a>
+    </div>
+  </section>
+  <p class="home-language-note">本站部分内容提供中英文版本。如有表达差异，以中文版本为准，特别注明的除外。</p>
 </div>

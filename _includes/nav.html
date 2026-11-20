@@ -26,6 +26,12 @@
               </a>
             </li>
             <li class="nav-menu-item">
+              <a class="nav-menu-link {% if page.url contains '/korean/' %}active{% endif %}"
+                 href="{{ '/korean/' | relative_url }}">
+                {% if is_zh %}韩语学习{% else %}Korean{% endif %}
+              </a>
+            </li>
+            <li class="nav-menu-item">
               <a class="nav-menu-link {% if page.url contains 'cv' %}active{% endif %}"
                  href="{% if is_zh %}{{ '/cv-cn/' | relative_url }}{% else %}{{ '/cv-en/' | relative_url }}{% endif %}">
                 {% if is_zh %}简历{% else %}CV{% endif %}

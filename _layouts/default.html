@@ -10,6 +10,7 @@
     integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YcnS/1p0TQXB5RDkG4yHqpN0gLpGESoIUKM" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+  {% if page.home %}<link rel="stylesheet" href="{{ '/assets/css/home.css' | relative_url }}">{% endif %}
 </head>
 <body>
   {% include nav.html %}
